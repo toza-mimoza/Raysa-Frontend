@@ -1,4 +1,8 @@
-## Node 2: Ubuntu Server 20.04 with Rasa Open Source Framework installed
+## Node 2: Ubuntu Server 20.04 with Rasa 3.0.0 installed
+
+Tested on an Ubuntu 20.04 Azure VM. 
+
+Note: Architecture for Rasa must be either **amd64** or **i386** since the **Tensorflow** packages that Rasa has as dependencies are only guaranteed to work on these platforms. 
 
 Functionality: 
 - Required:

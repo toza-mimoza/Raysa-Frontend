@@ -1,5 +1,7 @@
 ## Flask Web App 
 
+This is a Flask web application serving as a frontend for the user to give input to the Rasa assistant cluster. 
+
 Functionality: 
 - Required:
     - [ ] take user input 
