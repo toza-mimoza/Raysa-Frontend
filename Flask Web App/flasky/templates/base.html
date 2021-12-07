@@ -1,7 +1,7 @@
 <!doctype html>
 <html>
   <head>
-    {% block head %}
+    {% block head %}{% endblock %}
     <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
     <title>{% block title %}{% endblock %} - Raysa</title>
     <!--Let browser know website is optimized for mobile-->
@@ -54,7 +54,7 @@
         <!--Main css-->
         <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-    {% endblock %}
+    
   </head>
   <body>
     <div id="content">{% block content %}{% endblock %}</div>
@@ -110,8 +110,7 @@
           <div class="tap-target-content">
             <h5 class="white-text">Hey there 👋</h5>
             <p class="white-text">
-              I can help you get started with Rasa and answer your technical
-              questions.
+              Would you like to chat with me?
             </p>
           </div>
         </div>

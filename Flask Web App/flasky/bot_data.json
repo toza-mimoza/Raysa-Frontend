@@ -1,0 +1,17 @@
+{
+    "bots":
+    [
+        {
+            "bot_id": 1, 
+            "bot_name": "name1"
+        },
+        {
+            "bot_id": 2, 
+            "bot_name": "name2"
+        },
+        {
+            "bot_id": 3, 
+            "bot_name": "name3"
+        }
+    ]
+}

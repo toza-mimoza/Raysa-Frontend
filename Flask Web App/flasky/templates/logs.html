@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% block title %}Logs{% endblock %}
+{% block title %}Logs {{bot_name}}{% endblock %}
 {% block head %}
   {{ super() }}
   <style type="text/css">
@@ -7,7 +7,6 @@
   </style>
 {% endblock %}
 {% block content %}
-  <h1>Index</h1>
+  <h1>Logs for {{bot_name}}</h1>
   <p class="important">
-    Welcome on my awesome homepage.
 {% endblock %}
