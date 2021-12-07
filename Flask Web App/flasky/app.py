@@ -33,10 +33,10 @@ def index():
 #    return '<p>Your browser is {}</p>'.format(user_agent)
     return render_template('index.html')
 
-@app.route('/user/<name>')
-def template_user(name):
+@app.route('/user/<username>')
+def template_user(username):
     '''Displays user profile.'''
-    return render_template('user.html', name=name)
+    return render_template('user.html', username=username)
 
 @app.route('/train/<bot_name>')
 def train_bot(bot_name):
