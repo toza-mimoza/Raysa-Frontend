@@ -49,12 +49,16 @@ def train_bot(bot_name):
 @app.route('/logs/<bot_name>')
 def show_logs(bot_name):
     '''Shows logs page for a specific bot.'''
+    if not check_if_bot_exists(bot_name):
+        return page_not_found(bot_name)
     ##return '<h1>Logs... {}!</h1>'.format(bot_name)
     return render_template('logs.html', bot_name=bot_name)
 
 @app.route('/conversations/<bot_name>')
 def show_conversations(bot_name):
     '''Shows logs page for a specific bot.'''
+    if not check_if_bot_exists(bot_name):
+        return page_not_found(bot_name)
     ##return '<h1>Logs... {}!</h1>'.format(bot_name)
     return render_template('conversations.html', bot_name=bot_name)
 
