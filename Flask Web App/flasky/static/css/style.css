@@ -20,7 +20,7 @@ body {
 
 .chat_header {
   height: 60px;
-  background: #309203c7;
+  background: #031992c7;
   border-radius: 10px 10px 0px 0px;
   padding: 5px;
   font-size: 20px;
@@ -122,7 +122,7 @@ textarea-webkit-scrollbar {
   padding: 10px;
   float: right;
   margin-right: 0.5em;
-  background: #309203c7;
+  background: #031992c7;
   color: white;
   margin-bottom: 0.15em;
   font-size: 13px;
@@ -185,7 +185,7 @@ blockquote {
   padding: 5px;
   font-size: 20px;
   cursor: pointer;
-  color: #309203c7;
+  color: #031992c7;
 }
 
 .imgProfile {
@@ -222,7 +222,7 @@ blockquote {
 
 .dropdown-content li > a,
 .dropdown-content li > span {
-  color: #309203c7;
+  color: #031992c7;
 }
 
 @keyframes animateElement {
@@ -329,7 +329,7 @@ blockquote {
 
 .order,
 #closeContents {
-  color: #309203c7;
+  color: #031992c7;
 }
 
 .metadata_2,
@@ -437,7 +437,7 @@ div.content_data::-webkit-scrollbar {
 
 .menuChips {
   display: block;
-  background: #309203c7;
+  background: #031992c7;
   color: #fff;
   text-align: center;
   padding: 5px;
@@ -662,14 +662,14 @@ div.content_data::-webkit-scrollbar {
 
 .chip {
   background-color: white;
-  border: 1px solid#309203c7;
-  color: #309203c7;
+  border: 1px solid#031992c7;
+  color: #031992c7;
   font-weight: bolder;
   text-align: center;
 }
 
 .chip:hover {
-  background-color: #309203c7;
+  background-color: #031992c7;
   color: white;
 }
 
@@ -721,7 +721,7 @@ div.content_data::-webkit-scrollbar {
 
 .collapsible-header {
   font-weight: bold;
-  color: #309203c7;
+  color: #031992c7;
 }
 
 ul.collapsible > li:first-child .collapsible-header {
@@ -729,7 +729,7 @@ ul.collapsible > li:first-child .collapsible-header {
 }
 
 ul.collapsible > li:last-child .collapsible-header {
-  color: #309203c7;
+  color: #031992c7;
   border-radius: 0px 0px 20px 20px;
 }
 
@@ -761,7 +761,7 @@ ul.collapsible > li:last-child .collapsible-body {
 .botTyping > div {
   width: 10px;
   height: 10px;
-  background-color: #309203c7;
+  background-color: #031992c7;
   border-radius: 100%;
   display: inline-block;
   -webkit-animation: sk-bouncedelay 1.4s infinite ease-in-out both;
@@ -828,7 +828,7 @@ video:focus {
 
 .tap-target {
   color: #fff;
-  background: #309203c7;
+  background: #031992c7;
 }
 
 .pdf_attachment {
@@ -845,7 +845,7 @@ video:focus {
   height: 100%;
   font-size: 25px;
   padding: 7% !important;
-  background-color: #309203c7;
+  background-color: #031992c7;
   color: white;
 }
 
@@ -857,5 +857,5 @@ video:focus {
 }
 
 .pdf_link a {
-  color: #309203c7;
+  color: #031992c7;
 }
