@@ -55,9 +55,31 @@ def show_all_conversations(bot_name):
     '''Returns a template for conversations overview for a specific bot.'''
     if not check_if_bot_exists(bot_name):
         return page_not_found(bot_name)
-    ##return '<h1>Logs... {}!</h1>'.format(bot_name)
+
     return render_template('conversations.html', bot_name=bot_name)
+
+@app.route('/statistics/all')
+def show_statistics_for_all():
+    '''Returns a template for conversations overview for a specific bot.'''
+
+    # get all bots from db
+    # get all bots from json
+    return render_template('stats_all.html')
+
+@app.route('/statistics/<bot_name>')
+def show_statistics_for_all(bot_name):
+    '''Returns a template for conversations overview for a specific bot.'''
+    if not check_if_bot_exists(bot_name):
+        return page_not_found(bot_name)
+
+    # retrieve bot information from db
+    # retrieve bot information from json file 
+
+    context = {
+        "bot_name": "REPLACE", 
+        "cluster_name": "REPLACE"
+    }      
+    return render_template('stats_bot.html', **context)
 
 if __name__ == '__main__':
     app.run()
-# test comment
