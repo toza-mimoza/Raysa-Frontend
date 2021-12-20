@@ -1,8 +1,9 @@
 from flask import Flask, render_template
 from flask import request
 import json 
-
+from flask_sqlalchemy import SQLAlchemy
 app = Flask(__name__)
+db = SQLAlchemy(app)
 
 def check_if_bot_exists(name):
     file = open('bot_data.json')
