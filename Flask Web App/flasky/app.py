@@ -22,8 +22,20 @@ def check_if_bot_exists(name):
         return False
 
 @app.errorhandler(404)
-def page_not_found(content_type):
-   return render_template('404.html', content_type=content_type)
+def page_not_found(content_name):
+    '''
+    Returns 404 Page Not Found Custom Error page.
+    content_type: Type of content not found (bot, conversation, etc.)
+    '''
+    return render_template('404.html', content_name=content_name), 404
+
+@app.errorhandler(500)
+def internal_server_error(e):
+    '''
+    Returns 500 Internal Server Error page.
+    '''
+    return render_template('500.html'), 500
+
 
 @app.route('/')
 def index():
