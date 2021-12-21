@@ -2,8 +2,29 @@ from flask import Flask, render_template
 from flask import request
 from util import  check_if_bot_exists 
 from flask_sqlalchemy import SQLAlchemy
+from models import db, Bot
+from flask_migrate import Migrate
+
 app = Flask(__name__)
-db = SQLAlchemy(app)
+
+
+POSTGRES = {
+ 'user': 'postgres',
+ 'pw': 'kill998',
+ 'db': 'raysadb',
+ 'host': 'localhost',
+ 'port': '5432',
+}
+app.config['DEBUG'] = True
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://%(user)s:\
+%(pw)s@%(host)s:%(port)s/%(db)s' % POSTGRES
+# to suppress warnings for tracking modifications in db
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+#db = SQLAlchemy(app)
+db.init_app(app)
+migrate = Migrate(app, db)
+#with app.app_context():
+#    db.create_all()
 
 @app.errorhandler(404)
 def page_not_found(content_name):
@@ -19,7 +40,6 @@ def internal_server_error(e):
     Returns 500 Internal Server Error page.
     '''
     return render_template('500.html'), 500
-
 
 @app.route('/')
 def index():
@@ -64,10 +84,14 @@ def show_statistics_for_all():
 
     # get all bots from db
     # get all bots from json
+    result = Bot(1, "Bot1")
+    db.session.add(result)
+    db.session.commit()
+ 
     return render_template('stats_all.html')
 
 @app.route('/statistics/<bot_name>')
-def show_statistics_for_all(bot_name):
+def show_statistics_for_bot(bot_name):
     '''Returns a template for conversations overview for a specific bot.'''
     if not check_if_bot_exists(bot_name):
         return page_not_found(bot_name)
