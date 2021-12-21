@@ -1,47 +1,29 @@
-from flask import Flask, render_template
-from flask import request
-from util import  check_if_bot_exists 
-from flask_sqlalchemy import SQLAlchemy
-from models import db, Bot
-from flask_migrate import Migrate
+from flask import Blueprint, redirect, render_template
+from flask import request, url_for
+from flask_user import current_user, login_required, roles_required
 
-app = Flask(__name__)
+from app import db
+from app.models.user_models import UserProfileForm, Bot
+from app.util import check_if_bot_exists 
 
+main_blueprint = Blueprint('main', __name__, template_folder='templates')
 
-POSTGRES = {
- 'user': 'postgres',
- 'pw': 'kill998',
- 'db': 'raysadb',
- 'host': 'localhost',
- 'port': '5432',
-}
-app.config['DEBUG'] = True
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://%(user)s:\
-%(pw)s@%(host)s:%(port)s/%(db)s' % POSTGRES
-# to suppress warnings for tracking modifications in db
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-#db = SQLAlchemy(app)
-db.init_app(app)
-migrate = Migrate(app, db)
-#with app.app_context():
-#    db.create_all()
-
-@app.errorhandler(404)
+@main_blueprint.errorhandler(404)
 def page_not_found(content_name):
     '''
     Returns 404 Page Not Found Custom Error page.
-    content_type: Type of content not found (bot, conversation, etc.)
+    content_name: Type of content not found (bot, conversation, etc.)
     '''
     return render_template('404.html', content_name=content_name), 404
 
-@app.errorhandler(500)
+@main_blueprint.errorhandler(500)
 def internal_server_error(e):
     '''
     Returns 500 Internal Server Error page.
     '''
     return render_template('500.html'), 500
 
-@app.route('/')
+@main_blueprint.route('/')
 def index():
     '''Returns a template for the index page.'''
 #    return '<h1>Hello World!</h1>'
@@ -49,12 +31,21 @@ def index():
 #    return '<p>Your browser is {}</p>'.format(user_agent)
     return render_template('index.html')
 
-@app.route('/user/<username>')
-def template_user(username):
-    '''Returns a template for the user profile page.'''
-    return render_template('user.html', username=username)
+# The User page is accessible to authenticated users (users that have logged in)
+# @main_blueprint.route('/user')
+# @login_required  # Limits access to authenticated users
+# def user_profile_page():
+#     '''Returns a template for the user profile page.'''
+#     return render_template('user_profile_page.html')
 
-@app.route('/train/<bot_name>')
+# The Admin page is accessible to users with the 'admin' role
+@main_blueprint.route('/admin')
+@roles_required('admin')  # Limits access to users with the 'admin' role
+def admin_page():
+    return render_template('admin_page.html')
+
+@main_blueprint.route('/train/<bot_name>')
+@roles_required('admin')  # Limits access to users with the 'admin' role
 def train_bot(bot_name):
     '''Returns a template for training overview for a specific bot.'''
     if not check_if_bot_exists(bot_name):
@@ -62,7 +53,8 @@ def train_bot(bot_name):
     ##return '<h1>Training... {}!</h1>'.format(bot_name)
     return render_template('train.html', bot_name=bot_name)
 
-@app.route('/logs/<bot_name>')
+@main_blueprint.route('/logs/<bot_name>')
+@roles_required('admin')  # Limits access to users with the 'admin' role
 def show_logs(bot_name):
     '''Returns a template for logs overview for a specific bot.'''
     if not check_if_bot_exists(bot_name):
@@ -70,7 +62,8 @@ def show_logs(bot_name):
     ##return '<h1>Logs... {}!</h1>'.format(bot_name)
     return render_template('logs.html', bot_name=bot_name)
 
-@app.route('/conversations/<bot_name>')
+@main_blueprint.route('/conversations/<bot_name>')
+@login_required  # Limits access to authenticated users
 def show_all_conversations(bot_name):
     '''Returns a template for conversations overview for a specific bot.'''
     if not check_if_bot_exists(bot_name):
@@ -78,7 +71,7 @@ def show_all_conversations(bot_name):
 
     return render_template('conversations.html', bot_name=bot_name)
 
-@app.route('/statistics/all')
+@main_blueprint.route('/statistics/all')
 def show_statistics_for_all():
     '''Returns a template for conversations overview for a specific bot.'''
 
@@ -90,7 +83,7 @@ def show_statistics_for_all():
  
     return render_template('stats_all.html')
 
-@app.route('/statistics/<bot_name>')
+@main_blueprint.route('/statistics/<bot_name>')
 def show_statistics_for_bot(bot_name):
     '''Returns a template for conversations overview for a specific bot.'''
     if not check_if_bot_exists(bot_name):
@@ -105,5 +98,23 @@ def show_statistics_for_bot(bot_name):
     }      
     return render_template('stats_bot.html', **context)
 
-if __name__ == '__main__':
-    app.run()
+@main_blueprint.route('/profile', methods=['GET', 'POST'])
+@login_required
+def user_profile_page():
+    # Initialize form
+    form = UserProfileForm(request.form, obj=current_user)
+
+    # Process valid POST
+    if request.method == 'POST' and form.validate():
+        # Copy form fields to user_profile fields
+        form.populate_obj(current_user)
+
+        # Save user_profile
+        db.session.commit()
+
+        # Redirect to home page
+        return redirect(url_for('index'))
+
+    # Process GET or invalid POST
+    return render_template('user_profile_page.html',
+                           form=form)
