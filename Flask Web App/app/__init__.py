@@ -2,15 +2,15 @@
 # a Python package so it can be accessed using the 'import' statement.
 
 from flask import Flask
-from flask_sqlalchemy import SQLAlchemy
 from flask_mail import Mail
 from flask_migrate import Migrate
-from flask_user import UserManager
+from flask_user import UserManager, user_manager
 from flask_wtf.csrf import CSRFProtect
+from .models.user_models import db
 
 # Instantiate Flask extensions
 csrf_protect = CSRFProtect()
-db = SQLAlchemy()
+
 mail = Mail()
 migrate = Migrate()
 
@@ -45,7 +45,7 @@ def create_app(extra_config_settings={}):
     # Register blueprints
     from .views import register_blueprints
     register_blueprints(app)
-
+    
     # Define bootstrap_is_hidden_field for flask-bootstrap's bootstrap_wtf.html
     from wtforms.fields import HiddenField
 

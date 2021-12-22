@@ -3,10 +3,10 @@ from flask_sqlalchemy import SQLAlchemy
 import datetime
 
 from flask_user import UserMixin
-# from flask_user.forms import RegisterForm
+from flask_user.forms import RegisterForm
 from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField, validators
-from app import db
+db = SQLAlchemy()
 
 class BaseModel(db.Model):
     """Base data model for all objects"""
@@ -83,11 +83,11 @@ class UsersRoles(BaseModel):
 
 # # Define the User registration form
 # # It augments the Flask-User RegisterForm with additional fields
-# class MyRegisterForm(RegisterForm):
-#     first_name = StringField('First name', validators=[
-#         validators.DataRequired('First name is required')])
-#     last_name = StringField('Last name', validators=[
-#         validators.DataRequired('Last name is required')])
+class UserRegisterForm(RegisterForm):
+    first_name = StringField('First name', validators=[
+        validators.DataRequired('First name is required')])
+    last_name = StringField('Last name', validators=[
+        validators.DataRequired('Last name is required')])
 
 
 # Define the User profile form
