@@ -45,12 +45,12 @@ def member_page():
     return render_template('user_page.html')
 # The Admin page is accessible to users with the 'admin' role
 @main_blueprint.route('/admin')
-@roles_required('admin')  # Limits access to users with the 'admin' role
+@roles_required('Admin')  # Limits access to users with the 'admin' role
 def admin_page():
     return render_template('admin_page.html')
 
 @main_blueprint.route('/train/<bot_name>')
-@roles_required('admin')  # Limits access to users with the 'admin' role
+@roles_required('Admin')  # Limits access to users with the 'admin' role
 def train_bot(bot_name):
     '''Returns a template for training overview for a specific bot.'''
     if not check_if_bot_exists(bot_name):
@@ -59,7 +59,7 @@ def train_bot(bot_name):
     return render_template('train.html', bot_name=bot_name)
 
 @main_blueprint.route('/logs/<bot_name>')
-@roles_required('admin')  # Limits access to users with the 'admin' role
+@roles_required('Admin')  # Limits access to users with the 'admin' role
 def show_logs(bot_name):
     '''Returns a template for logs overview for a specific bot.'''
     if not check_if_bot_exists(bot_name):

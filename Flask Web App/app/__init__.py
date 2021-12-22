@@ -7,7 +7,8 @@ from flask_migrate import Migrate
 from flask_user import UserManager, user_manager
 from flask_wtf.csrf import CSRFProtect
 from .models.user_models import db
-
+import datetime
+from .secrets_file import SMTP_MAIL_USERNAME, SMTP_MAIL_PASS 
 # Instantiate Flask extensions
 csrf_protect = CSRFProtect()
 
@@ -58,11 +59,28 @@ def create_app(extra_config_settings={}):
     init_email_error_handler(app)
 
     # Setup Flask-User to handle user account related forms
-    from .models.user_models import User
+    from .models.user_models import User, Role
     from .views.main_views import user_profile_page
 
     # Setup Flask-User
     user_manager = UserManager(app, db, User)
+    
+    # Create 'admin@example.com' user with 'Admin' and 'Agent' roles
+
+    with app.app_context():
+        if not User.query.filter(User.email == SMTP_MAIL_USERNAME).first():
+            user = User(email=SMTP_MAIL_USERNAME, 
+                    email_confirmed_at=datetime.datetime.utcnow(),
+                    password=user_manager.hash_password(SMTP_MAIL_PASS),
+                    active=True,
+                    first_name='Svetozar',
+                    last_name='Stojanovic',
+                )
+
+            user.roles.append(Role(name='Admin'))
+            user.roles.append(Role(name='Agent'))
+            db.session.add(user)
+            db.session.commit()
 
     @app.context_processor
     def context_processor():
