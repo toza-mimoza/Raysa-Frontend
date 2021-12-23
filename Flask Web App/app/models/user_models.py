@@ -6,42 +6,7 @@ from flask_user import UserMixin
 from flask_user.forms import RegisterForm
 from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField, validators
-db = SQLAlchemy()
-
-class BaseModel(db.Model):
-    """Base data model for all objects"""
-    __abstract__ = True
-    # def __init__(self, *args):
-    #     super().__init__(*args)
-    def __repr__(self):
-        """Define a base way to print models"""
-        return '%s(%s)' % (self.__class__.__name__, {
-            column: value
-            for column, value in self._to_dict().items()
-        })
-    def json(self):
-        """
-        Define a base way to jsonify models, dealing with datetime objects
-        """
-        return {
-            column: value if not isinstance(value, datetime.date) else value.strftime('%Y-%m-%d')
-            for column, value in self._to_dict().items()
-        }
-class Bot(BaseModel, db.Model):
-    """Model for the bot table"""
-    __tablename__ = 'bots'
-    id = db.Column(db.Integer, primary_key = True)
-    bot_name = db.Column(db.String(50))
-    bot_added_at = db.Column(db.DateTime())
-    vm_name = db.Column(db.String(30))
-    vm_type = db.Column(db.String(30))
-    vm_ip = db.Column(db.String(15))
-    vm_vcpu = db.Column(db.Float)
-    vm_region = db.Column(db.String(15))
-    vm_ram = db.Column(db.Float)
-    def __init__(self,id,name):
-            self.id = id
-            self.name=name
+from .db import db, BaseModel
 
 # Define the User data model. Make sure to add the flask_user.UserMixin !!
 class User(BaseModel, UserMixin):
