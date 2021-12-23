@@ -69,6 +69,7 @@ def show_all_conversations(bot_name):
     return render_template('conversations.html', bot_name=bot_name)
 
 @bot_blueprint.route('/statistics/all')
+@login_required  # Limits access to authenticated users
 def show_statistics_for_all():
     '''Returns a template for conversations overview for a specific bot.'''
 
