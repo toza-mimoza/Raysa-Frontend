@@ -3,7 +3,9 @@ from flask import request, url_for
 from flask_user import current_user, login_required, roles_required
 
 from app import db
-from app.models.user_models import UserProfileForm, UserRegisterForm, Bot
+from app.models.user_models import UserProfileForm, UserRegisterForm
+from app.models.bot_models import Bot
+
 from app.util import check_if_bot_exists 
 
 main_blueprint = Blueprint('main', __name__, template_folder='templates')
