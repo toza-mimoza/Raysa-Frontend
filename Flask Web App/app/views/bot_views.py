@@ -39,7 +39,7 @@ def index():
         }
         bots_list.append(bot)
 
-    return render_template('bots.html', bots_list)
+    return render_template('bots.html', bots_list=bots_list)
 
 @bot_blueprint.route('/train/<bot_name>')
 @roles_required('Admin')  # Limits access to users with the 'admin' role
