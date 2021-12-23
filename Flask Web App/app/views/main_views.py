@@ -51,60 +51,6 @@ def member_page():
 def admin_page():
     return render_template('admin_page.html')
 
-@main_blueprint.route('/train/<bot_name>')
-@roles_required('Admin')  # Limits access to users with the 'admin' role
-def train_bot(bot_name):
-    '''Returns a template for training overview for a specific bot.'''
-    if not check_if_bot_exists(bot_name):
-        return page_not_found(bot_name)
-    ##return '<h1>Training... {}!</h1>'.format(bot_name)
-    return render_template('train.html', bot_name=bot_name)
-
-@main_blueprint.route('/logs/<bot_name>')
-@roles_required('Admin')  # Limits access to users with the 'admin' role
-def show_logs(bot_name):
-    '''Returns a template for logs overview for a specific bot.'''
-    if not check_if_bot_exists(bot_name):
-        return page_not_found(bot_name)
-    ##return '<h1>Logs... {}!</h1>'.format(bot_name)
-    return render_template('logs.html', bot_name=bot_name)
-
-@main_blueprint.route('/conversations/<bot_name>')
-@login_required  # Limits access to authenticated users
-def show_all_conversations(bot_name):
-    '''Returns a template for conversations overview for a specific bot.'''
-    if not check_if_bot_exists(bot_name):
-        return page_not_found(bot_name)
-
-    return render_template('conversations.html', bot_name=bot_name)
-
-@main_blueprint.route('/statistics/all')
-def show_statistics_for_all():
-    '''Returns a template for conversations overview for a specific bot.'''
-
-    # get all bots from db
-    # get all bots from json
-    result = Bot(1, "Bot1")
-    db.session.add(result)
-    db.session.commit()
- 
-    return render_template('stats_all.html')
-
-@main_blueprint.route('/statistics/<bot_name>')
-def show_statistics_for_bot(bot_name):
-    '''Returns a template for conversations overview for a specific bot.'''
-    if not check_if_bot_exists(bot_name):
-        return page_not_found(bot_name)
-
-    # retrieve bot information from db
-    # retrieve bot information from json file 
-
-    context = {
-        "bot_name": "REPLACE", 
-        "cluster_name": "REPLACE"
-    }      
-    return render_template('stats_bot.html', **context)
-
 @main_blueprint.route('/profile', methods=['GET', 'POST'])
 @login_required
 def user_profile_page():
