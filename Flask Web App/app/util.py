@@ -1,18 +1,7 @@
-import json
+from app.models.bot_models import Bot
 
-def check_if_bot_exists(name):
-    file = open('bot_data.json')
-    data = json.load(file) 
-
-    # bots list 
-    bots_list = data["bots"]
-    bots_list_names = []
-    for bot in bots_list:
-        bots_list_names.append(bot["bot_name"])
-
-    #print(bots_list_names)
-
-    if name in bots_list_names: 
-        return True
-    else: 
+def check_if_bot_exists(query_name):
+    '''Query DB for the Bot'''
+    if not Bot.query.filter_by(bot_name=query_name).first(): 
         return False
+    return True
