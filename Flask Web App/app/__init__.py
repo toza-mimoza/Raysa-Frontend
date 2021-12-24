@@ -6,14 +6,66 @@ from flask_mail import Mail
 from flask_migrate import Migrate
 from flask_user import UserManager, user_manager
 from flask_wtf.csrf import CSRFProtect
-from .models.user_models import db
+from .models.db import db
+from .models.bot_models import Bot
+from .models.user_models import User, Role
 import datetime
-from .secrets_file import SMTP_MAIL_USERNAME, SMTP_MAIL_PASS 
+from .secrets_file import *
 # Instantiate Flask extensions
 csrf_protect = CSRFProtect()
 
 mail = Mail()
 migrate = Migrate()
+
+def init_data():
+    '''Initialize site data'''
+    if not Bot.query.filter(Bot.bot_name == INIT_BOT_NAME1).first():
+        bot1 = Bot(bot_name=INIT_BOT_NAME1, 
+                bot_description = INIT_BOT_DESCRIPTION,
+                bot_added_at = datetime.datetime.utcnow(),
+                vm_name = INIT_VM_NAME_1,
+                vm_type = INIT_VM_TYPE_1,
+                vm_res_group = INIT_VM_RES_GROUP1,
+                vm_ip = INIT_VM_IP_1,
+                vm_vcpu = INIT_VM_VCPU1,
+                vm_region = INIT_VM_REGION,
+                vm_ram = INIT_VM_RAM1,
+            )
+
+        db.session.add(bot1)
+        db.session.commit()
+
+    if not Bot.query.filter(Bot.bot_name == INIT_BOT_NAME2).first():
+        bot2 = Bot(bot_name=INIT_BOT_NAME2, 
+                bot_description = INIT_BOT_DESCRIPTION,
+                bot_added_at = datetime.datetime.utcnow(),
+                vm_name = INIT_VM_NAME_2,
+                vm_type = INIT_VM_TYPE_2,
+                vm_res_group = INIT_VM_RES_GROUP2,
+                vm_ip = INIT_VM_IP_2,
+                vm_vcpu = INIT_VM_VCPU2,
+                vm_region = INIT_VM_REGION,
+                vm_ram = INIT_VM_RAM2,
+            )
+
+        db.session.add(bot2)
+        db.session.commit()
+
+    if not Bot.query.filter(Bot.bot_name == INIT_BOT_NAME3).first():
+        bot3 = Bot(bot_name=INIT_BOT_NAME3, 
+                bot_description = INIT_BOT_DESCRIPTION,
+                bot_added_at = datetime.datetime.utcnow(),
+                vm_name = INIT_VM_NAME_3,
+                vm_type = INIT_VM_TYPE_3,
+                vm_res_group = INIT_VM_RES_GROUP3,
+                vm_ip = INIT_VM_IP_3,
+                vm_vcpu = INIT_VM_VCPU3,
+                vm_region = INIT_VM_REGION,
+                vm_ram = INIT_VM_RAM3,
+            )
+
+        db.session.add(bot3)
+        db.session.commit()
 
 # Initialize Flask Application
 def create_app(extra_config_settings={}):
@@ -59,8 +111,8 @@ def create_app(extra_config_settings={}):
     init_email_error_handler(app)
 
     # Setup Flask-User to handle user account related forms
-    from .models.user_models import User, Role
-    from .views.main_views import user_profile_page
+    #from .models.user_models import User, Role
+    #from .views.main_views import user_profile_page
 
     # Setup Flask-User
     user_manager = UserManager(app, db, User)
@@ -68,6 +120,7 @@ def create_app(extra_config_settings={}):
     # Create 'admin@example.com' user with 'Admin' and 'Agent' roles
 
     with app.app_context():
+        init_data()
         if not User.query.filter(User.email == SMTP_MAIL_USERNAME).first():
             user = User(email=SMTP_MAIL_USERNAME, 
                     email_confirmed_at=datetime.datetime.utcnow(),
@@ -81,6 +134,7 @@ def create_app(extra_config_settings={}):
             user.roles.append(Role(name='Agent'))
             db.session.add(user)
             db.session.commit()
+        
 
     @app.context_processor
     def context_processor():
