@@ -1,18 +1,15 @@
-from os import name
 from flask_sqlalchemy import SQLAlchemy
 import datetime
-
-from flask_user import UserMixin
-from flask_user.forms import RegisterForm
-from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField, validators
 db = SQLAlchemy()
 
 class BaseModel(db.Model):
     """Base data model for all objects"""
     __abstract__ = True
     # def __init__(self, *args):
-    #     super().__init__(*args)
+    # #     super().__init__(*args)
+    created_on = db.Column(db.DateTime, default=db.func.now())
+    updated_on = db.Column(db.DateTime, default=db.func.now(), onupdate=db.func.now())
+
     def __repr__(self):
         """Define a base way to print models"""
         return '%s(%s)' % (self.__class__.__name__, {

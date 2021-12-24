@@ -1,7 +1,3 @@
-from os import name
-from flask_sqlalchemy import SQLAlchemy
-import datetime
-
 from flask_user import UserMixin
 from flask_user.forms import RegisterForm
 from flask_wtf import FlaskForm
