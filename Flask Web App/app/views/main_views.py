@@ -3,11 +3,10 @@ from flask import request, url_for
 from flask_user import current_user, login_required, roles_required
 
 from app import db
-from app.models.user_models import UserProfileForm, UserRegisterForm
-from app.models.bot_models import Bot
+from app.models.user_models import UserProfileForm
 
-from app.util import check_if_bot_exists 
-
+from app.models.site_models import Site 
+from app.secrets_file import INIT_SITE_NAME
 main_blueprint = Blueprint('main', __name__, template_folder='templates')
 
 @main_blueprint.app_errorhandler(404)
@@ -28,10 +27,15 @@ def internal_server_error(e):
 @main_blueprint.route('/')
 def index():
     '''Returns a template for the index page.'''
-#    return '<h1>Hello World!</h1>'
-#    user_agent = request.headers.get('User-Agent')
-#    return '<p>Your browser is {}</p>'.format(user_agent)
-    return render_template('index.html')
+
+    query_site = Site.query.filter(Site.site_name == INIT_SITE_NAME).first()
+    if query_site:
+        query_site.site_visitors_total_count+=1
+        db.session.commit()
+        
+        return render_template('index.html', site_data=query_site)
+    else: 
+        return page_not_found("Site")
 
 # The User page is accessible to authenticated users (users that have logged in)
 # @main_blueprint.route('/user')
@@ -44,7 +48,12 @@ def index():
 @main_blueprint.route('/member')
 @login_required  # Limits access to authenticated users
 def member_page():
-    return render_template('user_page.html')
+    user = current_user
+
+    context = {
+        "user": user, 
+    }
+    return render_template('user_page.html', context=context)
 # The Admin page is accessible to users with the 'admin' role
 @main_blueprint.route('/admin')
 @roles_required('Admin')  # Limits access to users with the 'admin' role
