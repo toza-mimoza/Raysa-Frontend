@@ -33,20 +33,7 @@ def index():
     bots_list = []
 
     for qbot in Bot.query.all(): 
-
-        bot = {
-            "bot_name": qbot.bot_name,
-            "bot_description": qbot.bot_description,
-            "bot_added_at": qbot.bot_added_at,
-            "vm_name": qbot.vm_name,
-            "vm_res_group": qbot.vm_res_group,
-            "vm_type": qbot.vm_type,
-            "vm_ip": qbot.vm_ip,
-            "vm_vcpu": qbot.vm_vcpu,
-            "vm_region": qbot.vm_region,
-            "vm_ram": qbot.vm_ram,
-        }
-        bots_list.append(bot)
+        bots_list.append(qbot)
 
     return render_template('bots.html', bots_list=bots_list)
 
