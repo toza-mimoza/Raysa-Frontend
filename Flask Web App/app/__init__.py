@@ -5,20 +5,32 @@ from flask import Flask
 from flask_mail import Mail
 from flask_migrate import Migrate
 from flask_user import UserManager, user_manager
+from flask_gravatar import Gravatar
 from flask_wtf.csrf import CSRFProtect
 from .models.db import db
 from .models.bot_models import Bot
 from .models.user_models import User, Role
+from .models.site_models import Site
 import datetime
 from .secrets_file import *
+from .views import register_blueprints
 # Instantiate Flask extensions
 csrf_protect = CSRFProtect()
 
 mail = Mail()
 migrate = Migrate()
-
+gravatar = None 
 def init_data():
     '''Initialize site data'''
+    if not Site.query.filter(Site.site_name == INIT_SITE_NAME).first():
+        site = Site(site_name = INIT_SITE_NAME,
+                site_description= "This is a currently ongoing project of building distributed Rasa chatbots with Ray distributed functions library, hence the project name Raysa.",
+                site_visitors_total_count = 0,
+            )
+
+        db.session.add(site)
+        db.session.commit()
+
     if not Bot.query.filter(Bot.bot_name == INIT_BOT_NAME1).first():
         bot1 = Bot(bot_name=INIT_BOT_NAME1, 
                 bot_description = INIT_BOT_DESCRIPTION,
@@ -80,11 +92,18 @@ def create_app(extra_config_settings={}):
     app.config.from_object('app.local_settings')
     # Load extra settings from extra_config_settings param
     app.config.update(extra_config_settings)
-
+    
     # Setup Flask-SQLAlchemy
     db.init_app(app)
     #db.create_all()
-
+    global gravatar
+    gravatar = Gravatar(app,
+                    size=100,
+                    rating='g',
+                    default='retro',
+                    force_default=False,
+                    use_ssl=False,
+                    base_url=None)
     # Setup Flask-Migrate
     migrate.init_app(app, db)
     with app.app_context():
@@ -96,7 +115,6 @@ def create_app(extra_config_settings={}):
     csrf_protect.init_app(app)
 
     # Register blueprints
-    from .views import register_blueprints
     register_blueprints(app)
     
     # Define bootstrap_is_hidden_field for flask-bootstrap's bootstrap_wtf.html
