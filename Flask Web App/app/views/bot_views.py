@@ -35,7 +35,16 @@ def index():
     for qbot in Bot.query.all(): 
 
         bot = {
-            "name": qbot.name,
+            "bot_name": qbot.bot_name,
+            "bot_description": qbot.bot_description,
+            "bot_added_at": qbot.bot_added_at,
+            "vm_name": qbot.vm_name,
+            "vm_res_group": qbot.vm_res_group,
+            "vm_type": qbot.vm_type,
+            "vm_ip": qbot.vm_ip,
+            "vm_vcpu": qbot.vm_vcpu,
+            "vm_region": qbot.vm_region,
+            "vm_ram": qbot.vm_ram,
         }
         bots_list.append(bot)
 
@@ -75,9 +84,6 @@ def show_statistics_for_all():
 
     # get all bots from db
     # get all bots from json
-    result = Bot(1, "Bot1")
-    db.session.add(result)
-    db.session.commit()
  
     return render_template('stats_all.html')
 
