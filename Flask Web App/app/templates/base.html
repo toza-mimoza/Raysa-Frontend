@@ -171,5 +171,7 @@
     <!-- Chart.js Script -->
     <script type="text/javascript" src="{{ url_for('static', filename='js/lib/chart.min.js') }}"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='js/lib/showdown.min.js') }}"></script> 
+    {% block scripts %}
+    {% endblock %}
     </body>
 </html>
