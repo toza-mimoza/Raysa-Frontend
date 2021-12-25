@@ -24,5 +24,5 @@ class BaseModel(db.Model, SerializerMixin):
         """
         return {
             column: value if not isinstance(value, datetime.date) else value.strftime('%Y-%m-%d')
-            for column, value in self._to_dict().items()
+            for column, value in self.to_dict().items()
         }
