@@ -5,7 +5,7 @@ from flask import Response
 from time import sleep
 from app import db
 from app.models.user_models import UserProfileForm, UserRegisterForm
-from app.models.bot_models import Bot
+from app.models.bot_models import Bots
 from app.util import check_if_bot_exists 
 from pygtail import Pygtail
 import logging, time 
@@ -39,7 +39,7 @@ def index():
     #    return '<p>Your browser is {}</p>'.format(user_agent)
     bots_list = []
 
-    for qbot in Bot.query.all(): 
+    for qbot in Bots.query.all(): 
         bots_list.append(qbot)
 
     return render_template('bots.html', bots_list=bots_list)
@@ -51,7 +51,7 @@ def train_bot(bot_name):
     if not check_if_bot_exists(bot_name):
         return page_not_found(bot_name)
         
-    bot = Bot.query.filter_by(bot_name = bot_name).first()
+    bot = Bots.query.filter_by(bot_name = bot_name).first()
 
     ##return '<h1>Training... {}!</h1>'.format(bot_name)
     return render_template('train.html', bot=bot)
@@ -63,7 +63,7 @@ def show_logs(bot_name):
     if not check_if_bot_exists(bot_name):
         return page_not_found(bot_name)
     
-    bot = Bot.query.filter_by(bot_name = bot_name).first()
+    bot = Bots.query.filter_by(bot_name = bot_name).first()
 
     return render_template('logs.html', bot=bot)
 

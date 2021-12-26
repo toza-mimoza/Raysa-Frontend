@@ -8,12 +8,15 @@ from flask_user import UserManager, user_manager
 from flask_gravatar import Gravatar
 from flask_wtf.csrf import CSRFProtect
 from .models.db import db
-from .models.bot_models import Bot
+from .models.bot_models import Bots
 from .models.user_models import User, Role
 from .models.site_models import Site
 import datetime
 from .secrets_file import *
 from .views import register_blueprints
+from .settings import cache_config
+from flask_caching import Cache
+
 # Instantiate Flask extensions
 csrf_protect = CSRFProtect()
 
@@ -31,8 +34,8 @@ def init_data():
         db.session.add(site)
         db.session.commit()
 
-    if not Bot.query.filter(Bot.bot_name == INIT_BOT_NAME1).first():
-        bot1 = Bot(bot_name=INIT_BOT_NAME1, 
+    if not Bots.query.filter(Bots.bot_name == INIT_BOT_NAME1).first():
+        bot1 = Bots(bot_name=INIT_BOT_NAME1, 
                 bot_description = INIT_BOT_DESCRIPTION,
                 bot_added_at = datetime.datetime.utcnow(),
                 vm_name = INIT_VM_NAME_1,
@@ -47,8 +50,8 @@ def init_data():
         db.session.add(bot1)
         db.session.commit()
 
-    if not Bot.query.filter(Bot.bot_name == INIT_BOT_NAME2).first():
-        bot2 = Bot(bot_name=INIT_BOT_NAME2, 
+    if not Bots.query.filter(Bots.bot_name == INIT_BOT_NAME2).first():
+        bot2 = Bots(bot_name=INIT_BOT_NAME2, 
                 bot_description = INIT_BOT_DESCRIPTION,
                 bot_added_at = datetime.datetime.utcnow(),
                 vm_name = INIT_VM_NAME_2,
@@ -63,8 +66,8 @@ def init_data():
         db.session.add(bot2)
         db.session.commit()
 
-    if not Bot.query.filter(Bot.bot_name == INIT_BOT_NAME3).first():
-        bot3 = Bot(bot_name=INIT_BOT_NAME3, 
+    if not Bots.query.filter(Bots.bot_name == INIT_BOT_NAME3).first():
+        bot3 = Bots(bot_name=INIT_BOT_NAME3, 
                 bot_description = INIT_BOT_DESCRIPTION,
                 bot_added_at = datetime.datetime.utcnow(),
                 vm_name = INIT_VM_NAME_3,
@@ -92,7 +95,8 @@ def create_app(extra_config_settings={}):
     app.config.from_object('app.local_settings')
     # Load extra settings from extra_config_settings param
     app.config.update(extra_config_settings)
-    
+    cache = Cache(config=cache_config)
+    cache.init_app(app)
     # Setup Flask-SQLAlchemy
     db.init_app(app)
     #db.create_all()
