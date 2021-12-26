@@ -7,6 +7,8 @@ from app.models.user_models import UserProfileForm
 
 from app.models.site_models import Site 
 from app.secrets_file import INIT_SITE_NAME
+from app.common.extensions import cache
+
 main_blueprint = Blueprint('main', __name__, template_folder='templates')
 
 @main_blueprint.app_errorhandler(404)
@@ -25,6 +27,7 @@ def internal_server_error(e):
     return render_template('500.html'), 500
 
 @main_blueprint.route('/')
+@cache.cached(timeout=50)
 def index():
     '''Returns a template for the index page.'''
 
@@ -47,6 +50,7 @@ def index():
 
 @main_blueprint.route('/member')
 @login_required  # Limits access to authenticated users
+@cache.cached(timeout=50)
 def member_page():
     user = current_user
 
@@ -57,6 +61,7 @@ def member_page():
 # The Admin page is accessible to users with the 'admin' role
 @main_blueprint.route('/admin')
 @roles_required('Admin')  # Limits access to users with the 'admin' role
+@cache.cached(timeout=50)
 def admin_page():
     return render_template('admin_page.html')
 
