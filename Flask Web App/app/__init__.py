@@ -14,8 +14,7 @@ from .models.site_models import Site
 import datetime
 from .secrets_file import *
 from .views import register_blueprints
-from .settings import cache_config
-from flask_caching import Cache
+from app.common.extensions import cache
 
 # Instantiate Flask extensions
 csrf_protect = CSRFProtect()
@@ -23,6 +22,8 @@ csrf_protect = CSRFProtect()
 mail = Mail()
 migrate = Migrate()
 gravatar = None 
+# cache = Cache(config=cache_config)
+
 def init_data():
     '''Initialize site data'''
     if not Site.query.filter(Site.site_name == INIT_SITE_NAME).first():
@@ -95,7 +96,7 @@ def create_app(extra_config_settings={}):
     app.config.from_object('app.local_settings')
     # Load extra settings from extra_config_settings param
     app.config.update(extra_config_settings)
-    cache = Cache(config=cache_config)
+    
     cache.init_app(app)
     # Setup Flask-SQLAlchemy
     db.init_app(app)
