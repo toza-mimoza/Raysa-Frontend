@@ -9,6 +9,19 @@ from app.secrets_file import INIT_SITE_NAME
 
 site_blueprint = Blueprint('site', __name__, template_folder='templates')
 
+def get_site():
+    query_site = Site.query.filter(Site.site_name == INIT_SITE_NAME).first()
+    if not query_site:
+        return page_not_found("Site")
+    
+    query_site.site_visitors_total_count+=1
+    db.session.commit()
+    return query_site
+
+def add_view(site):
+    site.site_visitors_total_count+=1
+    db.session.commit()
+
 @site_blueprint.app_errorhandler(404)
 def page_not_found(content_name):
     '''
@@ -27,18 +40,10 @@ def internal_server_error(e):
 @site_blueprint.route('/about')
 def about():
     '''Returns a template for the project's abouts page.'''
-#    return '<h1>Hello World!</h1>'
-#    user_agent = request.headers.get('User-Agent')
-#    return '<p>Your browser is {}</p>'.format(user_agent)
+    query_site = get_site()
 
-    query_site = Site.query.filter(Site.site_name == INIT_SITE_NAME).first()
-    if query_site:
-        query_site.site_visitors_total_count+=1
-        db.session.commit()
-        
-        return render_template('about.html', data=query_site)
-    else: 
-        return page_not_found("Site")
+    return render_template('about.html', data=query_site)
+
 @site_blueprint.route('/backend')
 @roles_required('Admin')  # Limits access to users with the 'admin' role
 def backend():
