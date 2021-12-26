@@ -4,7 +4,7 @@ from sqlalchemy.dialects.postgresql import UUID
 
 bots_conversations = db.Table('bots_conversations',
     db.Column('bot_id', db.Integer, db.ForeignKey('bots.id'), primary_key=True),
-    db.Column('conversation_id', db.Integer, db.ForeignKey('conversations.uuid'), primary_key=True)
+    db.Column('conversation_uuid', UUID(), db.ForeignKey('conversations.uuid'), primary_key=True)
 )
 
 bot_tags = db.Table('bot_tags',
@@ -19,8 +19,8 @@ class Bots(BaseModel, db.Model):
     bot_name = db.Column(db.String(50))
     bot_tags = db.relationship('Tags', secondary=bot_tags, lazy='subquery',
         backref=db.backref('bots', lazy=True))
-    # bot_conversations = db.relationship('Conversations', secondary=bots_conversations, lazy='subquery',
-    #     backref=db.backref('bots', lazy=True))
+    bot_conversations = db.relationship('Conversations', secondary=bots_conversations, lazy='subquery',
+        backref=db.backref('bots', lazy=True))
     bot_description = db.Column(db.String(300))
     bot_added_at = db.Column(db.DateTime())
     vm_name = db.Column(db.String(30))
@@ -32,9 +32,10 @@ class Bots(BaseModel, db.Model):
     vm_ram = db.Column(db.Float)
 
 class Tags(db.Model):
+    '''Model for tagging system for bots.'''
     __tablename__ = 'tags'
     id = db.Column(db.Integer, primary_key=True)
-
+    tag_name = db.Column(db.String(30))
 class Conversations(BaseModel, db.Model):
     '''Model that holds data about conversations happening with the widget on the Raysa Platform.'''
     __tablename__ = 'conversations'
@@ -54,9 +55,9 @@ class Messages(BaseModel, db.Model):
     __tablename__ = 'messages'
     uuid=db.Column(UUID(as_uuid=True),
         primary_key=True, default=lambda: uuid.uuid4().hex)
-    sender_uuid = db.Column(db.Integer, db.ForeignKey('actors.uuid'),
+    sender_uuid = db.Column(UUID(), db.ForeignKey('actors.uuid'),
         nullable=False)
-    conversation_uuid = db.Column(db.Integer, db.ForeignKey('conversations.uuid'),
+    conversation_uuid = db.Column(UUID(), db.ForeignKey('conversations.uuid'),
         nullable=False)
     message_text =  db.Column(db.String(150))
     
