@@ -4,32 +4,18 @@ from flask_user import current_user, login_required, roles_required
 from flask import Response
 from time import sleep
 from app import db
-from app.models.user_models import UserProfileForm, UserRegisterForm
+
 from app.models.bot_models import Bots
+from app.views.error_views import page_not_found, internal_server_error
 from app.util import check_if_bot_exists 
 from pygtail import Pygtail
-import logging, time 
+import time 
 bot_blueprint = Blueprint('bot', __name__, template_folder='templates')
 
 LOG_FILE = 'logs/Art Chatbot.log'
 # log = logging.getLogger('__name__')
 # logging.basicConfig(filename=LOG_FILE, level=logging.DEBUG)
 
-
-@bot_blueprint.app_errorhandler(404)
-def page_not_found(content_name):
-    '''
-    Returns 404 Page Not Found Custom Error page.
-    content_name: Type of content not found (bot, conversation, etc.)
-    '''
-    return render_template('404.html', content_name=content_name), 404
-
-@bot_blueprint.app_errorhandler(500)
-def internal_server_error(e):
-    '''
-    Returns 500 Internal Server Error page.
-    '''
-    return render_template('500.html'), 500
 
 @bot_blueprint.route('/bots')
 def index():
@@ -53,8 +39,7 @@ def train_bot(bot_name):
         
     bot = Bots.query.filter_by(bot_name = bot_name).first()
 
-    ##return '<h1>Training... {}!</h1>'.format(bot_name)
-    return render_template('train.html', bot=bot)
+    return render_template('bots/train.html', bot=bot)
 
 @bot_blueprint.route('/logs/<bot_name>')
 @roles_required('Admin')  # Limits access to users with the 'admin' role
@@ -65,12 +50,12 @@ def show_logs(bot_name):
     
     bot = Bots.query.filter_by(bot_name = bot_name).first()
 
-    return render_template('logs.html', bot=bot)
+    return render_template('bots/logs.html', bot=bot)
 
 @bot_blueprint.route('/')
 def entry_point():
 	# log.info("route =>'/env' - hit!")
-	return render_template('logs.html')
+	return render_template('bots/logs.html')
 
 
 @bot_blueprint.route('/progress')
@@ -101,15 +86,6 @@ def show_env():
 		env[k] = str(v)
 	# log.info("route =>'/env' [env]:\n%s" % env)
 	return env
-# @roles_required('Admin')  # Limits access to users with the 'admin' role
-# def stream_logs(bot_name):
-#     '''Returns a template for logs overview for a specific bot.'''
-#     if not check_if_bot_exists(bot_name):
-#         return page_not_found(bot_name)
-    
-#     bot = Bot.query.filter_by(bot_name = bot_name).first()
-
-#     return render_template('logs.html', bot=bot)
 
 @bot_blueprint.route('/conversations/<bot_name>')
 @login_required  # Limits access to authenticated users
@@ -118,7 +94,7 @@ def show_all_conversations(bot_name):
     if not check_if_bot_exists(bot_name):
         return page_not_found(bot_name)
 
-    return render_template('conversations.html', bot_name=bot_name)
+    return render_template('bots/conversations.html', bot_name=bot_name)
 
 @bot_blueprint.route('/statistics/all')
 @login_required  # Limits access to authenticated users
@@ -126,9 +102,8 @@ def show_statistics_for_all():
     '''Returns a template for conversations overview for a specific bot.'''
 
     # get all bots from db
-    # get all bots from json
  
-    return render_template('stats_all.html')
+    return render_template('bots/stats_all.html')
 
 @bot_blueprint.route('/statistics/<bot_name>')
 def show_statistics_for_bot(bot_name):
@@ -137,10 +112,9 @@ def show_statistics_for_bot(bot_name):
         return page_not_found(bot_name)
 
     # retrieve bot information from db
-    # retrieve bot information from json file 
 
     context = {
         "bot_name": "REPLACE", 
         "cluster_name": "REPLACE"
     }      
-    return render_template('stats_bot.html', **context)
+    return render_template('bots/stats_bot.html', **context)

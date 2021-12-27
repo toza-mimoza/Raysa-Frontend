@@ -1,11 +1,11 @@
 from flask import Blueprint, redirect, render_template
 from flask import request, url_for
-from flask_user import current_user, login_required, roles_required
-from sqlalchemy.orm import query
+from flask_user import current_user
 
 from app import db
 from app.models.site_models import Site 
 from app.secrets_file import INIT_SITE_NAME
+from app.views.error_views import page_not_found
 
 site_blueprint = Blueprint('site', __name__, template_folder='templates')
 
@@ -22,36 +22,27 @@ def add_view(site):
     site.site_visitors_total_count+=1
     db.session.commit()
 
-@site_blueprint.app_errorhandler(404)
-def page_not_found(content_name):
-    '''
-    Returns 404 Page Not Found Custom Error page.
-    content_name: Type of content not found (bot, conversation, etc.)
-    '''
-    return render_template('404.html', content_name=content_name), 404
-
-@site_blueprint.app_errorhandler(500)
-def internal_server_error(e):
-    '''
-    Returns 500 Internal Server Error page.
-    '''
-    return render_template('500.html'), 500
-
 @site_blueprint.route('/about')
 def about():
     '''Returns a template for the project's abouts page.'''
     query_site = get_site()
 
-    return render_template('about.html', data=query_site)
+    return render_template('site/about.html', data=query_site)
+
+@site_blueprint.before_app_request
+def before_request():
+    # lang = get_locale()
+    # lang = lang if lang else app.config['BABEL_DEFAULT_LOCALE']
+    # set_lang(lang)
+
+    if request.path.startswith('/admin'):
+        if current_user.is_authenticated:
+            if not current_user.has_role("Admin"):
+                return redirect(url_for('user.logout'))
+        else:
+            return redirect(url_for('user.login'))
 
 @site_blueprint.route('/backend')
-@roles_required('Admin')  # Limits access to users with the 'admin' role
 def backend():
-    '''Returns a template for the Raysa site backend page.'''
-#    return '<h1>Hello World!</h1>'
-#    user_agent = request.headers.get('User-Agent')
-#    return '<p>Your browser is {}</p>'.format(user_agent)
-    data = {
-        "key": "value"
-    }
-    return render_template('backend.html', data=data)
+    '''Redirects to the admin panel page at '/admin'.'''
+    return redirect('admin')
