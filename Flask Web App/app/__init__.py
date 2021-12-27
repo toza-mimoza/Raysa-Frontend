@@ -1,20 +1,22 @@
 # __init__.py is a special Python file that allows a directory to become
 # a Python package so it can be accessed using the 'import' statement.
 
-from flask import Flask
+from flask import Flask, render_template
 from flask_mail import Mail
 from flask_migrate import Migrate
 from flask_user import UserManager, user_manager
 from flask_gravatar import Gravatar
 from flask_wtf.csrf import CSRFProtect
 from .models.db import db
-from .models.bot_models import Bots
+from .models.bot_models import Bots, Conversations, Messages
 from .models.user_models import User, Role
 from .models.site_models import Site
 import datetime
 from .secrets_file import *
 from .views import register_blueprints
 from app.common.extensions import cache
+from flask_admin import Admin
+from flask_admin.contrib.sqla import ModelView
 
 # Instantiate Flask extensions
 csrf_protect = CSRFProtect()
@@ -23,6 +25,7 @@ mail = Mail()
 migrate = Migrate()
 gravatar = None 
 # cache = Cache(config=cache_config)
+
 
 def init_data():
     '''Initialize site data'''
@@ -97,7 +100,15 @@ def create_app(extra_config_settings={}):
     # Load extra settings from extra_config_settings param
     app.config.update(extra_config_settings)
     
+    app.config['FLASK_ADMIN_SWATCH'] = 'cerulean'
+
+    admin = Admin(app, name='Raysa', template_mode='bootstrap3')
+    admin.add_view(ModelView(User, db.session))
+    admin.add_view(ModelView(Bots, db.session))
+    admin.add_view(ModelView(Conversations, db.session))
+    admin.add_view(ModelView(Messages, db.session))
     cache.init_app(app)
+    
     # Setup Flask-SQLAlchemy
     db.init_app(app)
     #db.create_all()
