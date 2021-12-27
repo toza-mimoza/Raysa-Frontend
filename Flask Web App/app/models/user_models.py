@@ -9,6 +9,8 @@ class User(BaseModel, UserMixin):
     __tablename__ = 'users'
     id = db.Column(db.Integer, primary_key=True)
 
+    def has_role(self, *args):
+        return set(args).issubset({role.name for role in self.roles})
     # User authentication information (required for Flask-User)
     email = db.Column(db.Unicode(255), nullable=False, server_default=u'', unique=True)
     email_confirmed_at = db.Column(db.DateTime())
