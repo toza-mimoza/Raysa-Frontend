@@ -3,3 +3,6 @@ __pycache__/
 
 migrations/
 logs/
+
+#ignore the starting script for Windows dev
+start.ps1 
