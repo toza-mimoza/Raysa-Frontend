@@ -44,12 +44,8 @@
           crossorigin="anonymous"
         />
     
-        <!--Import materialize.css -->
-        <link
-          rel="stylesheet"
-          type="text/css"
-          href="{{ url_for('static', filename='css/materialize.min.css') }}"
-        />
+        <!-- Remix Icons package -->
+    	  <link rel='stylesheet' href='https://cdn.jsdelivr.net/npm/remixicon@2.5.0/fonts/remixicon.css'>
         <!--Bootstrap css-->
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
         <!--Main css-->
@@ -60,118 +56,95 @@
   <body>
     <!-- START NAVBAR -->
     
-    <nav class="navbar navbar-expand-lg navbar-dark indigo lighten-2">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top ml-auto indigo lighten-2">
       <div class="container-fluid">
-        <a class="navbar-brand" href="#">
-          <img src="{{ url_for('static', filename='img/botAvatar.png') }}" width="30" height="30" class="d-inline-block align-center" alt="">
-          Raysa
-        </a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-            <li class="nav-item">
-              <a class="nav-link active" aria-current="page" href="{{ url_for('main.index') }}">Home</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#">Backend</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="{{ url_for('bot.show_statistics_for_all') }}" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                Statistics
-              </a>
-            </li>
-          </ul>
+
+        <div class="navbar-header">
+          <a class="navbar-brand" href="{{ url_for('main.index') }}">
+            <img src="{{ url_for('static', filename='img/botAvatar.png') }}" width="30" height="30" class="align-center" alt="logo">
+              Raysa
+          </a>
+        </div>
+        
+          <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+              <span class="navbar-toggler-icon"></span>
+          </button>
+
+          <div class="collapse navbar-collapse" id="navbarResponsive">
+              <ul class="navbar-nav">
+                <li class="nav-item">
+                  <a class="nav-link active" aria-current="page" href="{{ url_for('main.index') }}">Home</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="#">Backend</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="{{ url_for('bot.show_statistics_for_all') }}" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    Statistics
+                  </a>
+                </li>
+
+              </ul>
+
+              <ul class="navbar-nav ms-auto">
+                {% if not user.is_authenticated %}
+                <li class="nav-item">
+                  <a href="{{ url_for('user.login')}}" class="nav-link">
+                  <span class="ri-login-circle-line ri-xl"></span>
+                  </a>
+                </li>
+                
+                {% else %}
+                <li class="nav-item">
+                  <a href="{{ url_for('user.logout')}}" class="nav-link">
+                    <span class="ri-logout-circle-line ri-xl"></span>
+                  </a>  
+                </li>
+                <li class="nav-item">
+                  <a href="{{ url_for('main.member_page')}}" class="nav-link">
+                    <span class="span-name">{{user.first_name}} {{user.last_name}}</span>
+                    <span class="ri-account-circle-line ri-xl"></span>
+                  </a>  
+                </li>
+                
+                {% endif %}
+              </ul>
+            </div>
         </div>
       </div>
-    </nav>
+  </nav>
     <!-- END NAVBAR -->
     <div class="m-5" id="wrap">
       <div id="main" class="container clear-top">
       {% block content %}{% endblock %}
         
-        <!-- Modal for rendering the charts, declare this if you want to render charts, 
-           else you remove the modal -->
-        <div id="modal1" class="modal">
-          <canvas id="modal-chart"></canvas>
-        </div>
-  
-        <!--chatbot widget -->
-        <div class="widget">
-          <div class="chat_header">
-            <!--Add the name of the bot here -->
-            <span class="chat_header_title">Raysa</span>
-            <span class="dropdown-trigger" href="#" data-target="dropdown1">
-              <i class="material-icons"> more_vert </i>
-            </span>
-  
-            <!-- Dropdown menu-->
-            <ul id="dropdown1" class="dropdown-content">
-              <li><a href="#" id="clear">Clear</a></li>
-              <li><a href="#" id="restart">Restart</a></li>
-              <li><a href="#" id="close">Close</a></li>
-            </ul>
-          </div>
-  
-          <!--Chatbot contents goes here -->
-          <div class="chats" id="chats">
-            <div class="clearfix"></div>
-          </div>
-  
-          <!--keypad for user to type the message -->
-          <div class="keypad">
-            <textarea
-              id="userInput"
-              placeholder="Type a message..."
-              class="usrInput"
-            ></textarea>
-            <div id="sendButton">
-              <i class="fa fa-paper-plane" aria-hidden="true"></i>
-            </div>
-          </div>
-        </div>
-  
-        <!--bot profile-->
-        <div class="profile_div" id="profile_div">
-          <img class="imgProfile" src="{{ url_for('static', filename='img/botAvatar.png') }}" />
-        </div>
-  
-        <!-- Bot pop-up intro -->
-        <div class="tap-target" data-target="profile_div">
-          <div class="tap-target-content">
-            <h5 class="white-text">Hey there 👋</h5>
-            <p class="white-text">
-              Would you like to chat with me?
-            </p>
-          </div>
-        </div>
-      </div>
-    </div>
     <div class="fixed-bottom" id="footer">
       {% block footer %}
       &copy; Copyright 2021-2022 by <a href="https://www.galaktoza.de">Svetozar Stojanovic</a>.
       {% endblock %}
     </div>
-    <!--JavaScript at end of body for optimized loading-->
+    <!-- JavaScript at end of body for optimized loading
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script
       type="text/javascript"
       src="{{ url_for('static', filename='js/lib/materialize.min.js') }}"
     ></script>
-    <script src="{{ url_for('static', filename='js/lib/uuid.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/lib/uuid.min.js') }}"></script> -->
     
     <!-- Bootstrap JS Bundle -->
-    <!--<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js"></script>
-    -->
-    
-    <!--Main Script -->
-    <script type="text/javascript" src="{{ url_for('static', filename='js/scripts.js') }}"></script>
-    
-    <!-- Chart.js Script -->
-    <script type="text/javascript" src="{{ url_for('static', filename='js/lib/chart.min.js') }}"></script>
-    <script type="text/javascript" src="{{ url_for('static', filename='js/lib/showdown.min.js') }}"></script> 
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
     {% block scripts %}
     {% endblock %}
-    </body>
+
+    <div id="webchat"></div>
+    <script src="https://cdn.jsdelivr.net/npm/rasa-webchat@0.11.5/lib/index.min.js"></script>
+    <script>
+      // set profile avatar url 
+      window.profileAvatarUrl="{{ url_for('static', filename='img/botAvatar.png') }}";
+      //console.log(profileAvatarUrl);
+    </script>
+    <script src="{{ url_for('static', filename='js/botfrontWebChat.js') }}"></script>
+  </body>
 </html>
