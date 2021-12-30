@@ -4,7 +4,7 @@
 from flask import Flask, render_template
 from flask_mail import Mail
 from flask_migrate import Migrate
-from flask_user import UserManager, user_manager
+from flask_user import UserManager, user_manager, current_user
 from flask_gravatar import Gravatar
 from flask_wtf.csrf import CSRFProtect
 from .models.db import db
@@ -108,7 +108,7 @@ def create_app(extra_config_settings={}):
     admin.add_view(ModelView(Conversations, db.session))
     admin.add_view(ModelView(Messages, db.session))
     cache.init_app(app)
-    
+
     # Setup Flask-SQLAlchemy
     db.init_app(app)
     #db.create_all()
@@ -173,7 +173,10 @@ def create_app(extra_config_settings={}):
     @app.context_processor
     def context_processor():
         return dict(user_manager=user_manager)
-
+    
+    @app.context_processor
+    def inject_user():
+        return dict(user=current_user)
     return app
 
 
