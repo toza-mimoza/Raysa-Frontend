@@ -3,7 +3,6 @@ from flask import request, url_for
 from flask_user import current_user, login_required, roles_required
 
 from app import db
-from app.models.user_models import UserProfileForm
 
 from app.models.site_models import Site 
 from app.secrets_file import INIT_SITE_NAME
