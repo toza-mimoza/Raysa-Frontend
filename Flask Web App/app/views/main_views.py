@@ -52,23 +52,23 @@ def before_request():
         else:
             return redirect(url_for('user.login'))
 
-@main_blueprint.route('/profile', methods=['GET', 'POST'])
-@login_required
-def user_profile_page():
-    # Initialize form
-    form = UserProfileForm(request.form, obj=current_user)
+# @main_blueprint.route('/profile', methods=['GET', 'POST'])
+# @login_required
+# def user_profile_page():
+#     # Initialize form
+#     form = UserProfileForm(request.form, obj=current_user)
 
-    # Process valid POST
-    if request.method == 'POST' and form.validate():
-        # Copy form fields to user_profile fields
-        form.populate_obj(current_user)
+#     # Process valid POST
+#     if request.method == 'POST' and form.validate():
+#         # Copy form fields to user_profile fields
+#         form.populate_obj(current_user)
 
-        # Save user_profile
-        db.session.commit()
+#         # Save user_profile
+#         db.session.commit()
 
-        # Redirect to home page
-        return redirect(url_for('main.index'))
+#         # Redirect to home page
+#         return redirect(url_for('main.index'))
 
-    # Process GET or invalid POST
-    return render_template('user_profile_page.html',
-                           form=form)
+#     # Process GET or invalid POST
+#     return render_template('user/user_profile_page.html',
+#                            form=form)
