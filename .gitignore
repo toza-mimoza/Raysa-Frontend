@@ -5,4 +5,14 @@ migrations/
 logs/
 
 #ignore the starting script for Windows dev
-start.ps1 
+start.ps1
+
+# ignore set environment variable script
+set_env_var.sh
+run_flask.sh
+commands_list.txt
+
+
+# ignore flask .env and .flaskenv
+.env
+.flaskenv
