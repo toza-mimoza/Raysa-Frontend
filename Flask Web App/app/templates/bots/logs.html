@@ -8,7 +8,7 @@
   <h1>Live logs for {{bot_name}}</h1>
   <section class="section">
     <div class="container">
-      <div class="columns is-centered is-mobile">	
+      <div class="columns is-centered is-mobile">
         <div class="column is-muted notification is-four-fifths">
           <h1 class="title">{{bot.bot_name}}</h1>
           <h2 class="subtitle"></h2>
@@ -17,7 +17,7 @@
       </div>
     </div>
     <div class="container">
-      <div class="columns is-centered is-mobile">	
+      <div class="columns is-centered is-mobile">
         <div class="column is-dark notification is-four-fifths">
           <div class="is-size-7 has-text-warning" id="display">
             <ul id="display_list">
@@ -43,7 +43,7 @@
     var source_progress = new EventSource("/progress");
     source_progress.onmessage = function(event) {
       $('#progress').text(event.data+'%');
-      $('#progress').value(event.data);
+      $('#progress').val(event.data);
       if(event.data == 100){
         source_progress.close()
       }
