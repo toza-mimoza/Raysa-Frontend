@@ -1,10 +1,15 @@
-
-.navbar-right > li > a {
-    padding-left: 5px !important;
-    padding-right: 5px !important;
-}
-
 body {
     padding-top: 70px;
 }
 
+/* Modify the background color of the navigation bar */
+.navbar-custom {
+    background-color: indigo;
+}
+
+/* Modify brand and text color */
+.navbar-custom .navbar-brand,
+.navbar-custom .navbar-text,
+.navbar-custom a{
+    color: white;
+}

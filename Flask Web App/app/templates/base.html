@@ -43,7 +43,7 @@
           integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0="
           crossorigin="anonymous"
         />
-    
+
         <!-- Remix Icons package -->
     	  <link rel='stylesheet' href='https://cdn.jsdelivr.net/npm/remixicon@2.5.0/fonts/remixicon.css'>
         <!--Bootstrap css-->
@@ -51,12 +51,12 @@
         <!--Main css-->
         <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-    
+
   </head>
   <body>
     <!-- START NAVBAR -->
-    
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top ml-auto indigo lighten-2">
+
+    <nav class="navbar navbar-expand-lg navbar-custom fixed-top ml-auto">
       <div class="container-fluid">
 
         <div class="navbar-header">
@@ -65,7 +65,7 @@
               Raysa
           </a>
         </div>
-        
+
           <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
               <span class="navbar-toggler-icon"></span>
           </button>
@@ -90,23 +90,23 @@
                 {% if not user.is_authenticated %}
                 <li class="nav-item">
                   <a href="{{ url_for('user.login')}}" class="nav-link">
-                  <span class="ri-login-circle-line ri-xl"></span>
+                  <span class="ri-login-circle-line ri-xl align-middle"></span>
                   </a>
                 </li>
-                
+
                 {% else %}
                 <li class="nav-item">
                   <a href="{{ url_for('user.logout')}}" class="nav-link">
-                    <span class="ri-logout-circle-line ri-xl"></span>
-                  </a>  
+                    <span class="ri-logout-circle-line ri-xl align-middle"></span>
+                  </a>
                 </li>
                 <li class="nav-item">
                   <a href="{{ url_for('main.member_page')}}" class="nav-link">
-                    <span class="span-name">{{user.first_name}} {{user.last_name}}</span>
-                    <span class="ri-account-circle-line ri-xl"></span>
-                  </a>  
+                    <span class="span-name align-middle">{{user.first_name}} {{user.last_name}}</span>
+                    <span class="ri-account-circle-line ri-xl align-middle"></span>
+                  </a>
                 </li>
-                
+
                 {% endif %}
               </ul>
             </div>
@@ -117,7 +117,7 @@
     <div class="m-5" id="wrap">
       <div id="main" class="container clear-top">
       {% block content %}{% endblock %}
-        
+
     <div class="fixed-bottom" id="footer">
       {% block footer %}
       &copy; Copyright 2021-2022 by <a href="https://www.galaktoza.de">Svetozar Stojanovic</a>.
@@ -130,7 +130,7 @@
       src="{{ url_for('static', filename='js/lib/materialize.min.js') }}"
     ></script>
     <script src="{{ url_for('static', filename='js/lib/uuid.min.js') }}"></script> -->
-    
+
     <!-- Bootstrap JS Bundle -->
 <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
@@ -141,7 +141,7 @@
     <div id="webchat"></div>
     <script src="https://cdn.jsdelivr.net/npm/rasa-webchat@0.11.5/lib/index.min.js"></script>
     <script>
-      // set profile avatar url 
+      // set profile avatar url
       window.profileAvatarUrl="{{ url_for('static', filename='img/botAvatar.png') }}";
       //console.log(profileAvatarUrl);
     </script>
