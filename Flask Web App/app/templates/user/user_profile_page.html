@@ -1,12 +1,11 @@
-{% extends "base.html" %} 
+{% extends "base.html" %}
 
 {% block content %}
     <div class="card" style="width: 25rem;">
         <img alt="No gravatar present" src="{{ context.user.email | gravatar }}" >
         <div class="card-body">
         <h5 class="card-title">{{context.user.first_name}} {{context.user.last_name}}</h5>
-        <p class="card-text">    
-            
+        <p class="card-text">
         <!-- <p><a href={{ url_for('user.register') }}>{%trans%}Register{%endtrans%}</a></p>
         <p><a href={{ url_for('user.login') }}>{%trans%}Sign in{%endtrans%}</a></p> -->
         <p><a href={{ url_for('main.index') }}>{%trans%}Home Page{%endtrans%}</a></p>
@@ -16,10 +15,6 @@
             <p><a href={{ url_for('admin.index') }}>{%trans%}Admin Page{%endtrans%}</a></p>
         {% endif %}
         <p><a href={{ url_for('user.logout') }}>{%trans%}Sign out{%endtrans%}</a></p>
-    </p>
         </div>
     </div>
-    <h2></h2>
-    
-
 {% endblock %}
