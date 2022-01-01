@@ -19,3 +19,7 @@ body {
   height: 30px;
   vertical-align: middle;
 }
+
+#profile-card{
+  width: 20rem;
+}

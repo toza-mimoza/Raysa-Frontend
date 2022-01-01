@@ -1,6 +1,8 @@
 {% extends "base.html" %}
-
+{% block title %}Member profile{% endblock %}
 {% block content %}
+
+  <div class="col d-flex justify-content-center">
     <div class="card" style="width: 25rem;">
         <img alt="No gravatar present" src="{{ context.user.email | gravatar }}" >
         <div class="card-body">
@@ -17,4 +19,6 @@
         <p><a href={{ url_for('user.logout') }}>{%trans%}Sign out{%endtrans%}</a></p>
         </div>
     </div>
+  </div>
+
 {% endblock %}
