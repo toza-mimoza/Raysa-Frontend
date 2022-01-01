@@ -59,9 +59,9 @@
     <nav class="navbar navbar-expand-lg navbar-custom fixed-top ml-auto">
       <div class="container-fluid">
 
-        <div class="navbar-header">
+        <div class="navbar-header align-middle">
           <a class="navbar-brand" href="{{ url_for('main.index') }}">
-            <img src="{{ url_for('static', filename='img/botAvatar.png') }}" width="30" height="30" class="align-center" alt="logo">
+            <img src="{{ url_for('static', filename='img/botAvatar.png') }}" id="brandLogo" alt="logo">
               Raysa
           </a>
         </div>
@@ -123,14 +123,6 @@
       &copy; Copyright 2021-2022 by <a href="https://www.galaktoza.de">Svetozar Stojanovic</a>.
       {% endblock %}
     </div>
-    <!-- JavaScript at end of body for optimized loading
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <script
-      type="text/javascript"
-      src="{{ url_for('static', filename='js/lib/materialize.min.js') }}"
-    ></script>
-    <script src="{{ url_for('static', filename='js/lib/uuid.min.js') }}"></script> -->
-
     <!-- Bootstrap JS Bundle -->
 <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>

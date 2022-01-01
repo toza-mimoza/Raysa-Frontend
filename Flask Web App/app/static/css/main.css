@@ -13,3 +13,9 @@ body {
 .navbar-custom a{
     color: white;
 }
+
+#brandLogo{
+  width: 30px;
+  height: 30px;
+  vertical-align: middle;
+}
