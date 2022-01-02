@@ -3,7 +3,7 @@ from flask import request, url_for
 from flask_user import current_user
 
 from app import db
-from app.models.site_models import Site 
+from app.models.site_models import Site
 from app.secrets_file import INIT_SITE_NAME
 from app.views.error_views import page_not_found
 
@@ -13,7 +13,7 @@ def get_site():
     query_site = Site.query.filter(Site.site_name == INIT_SITE_NAME).first()
     if not query_site:
         return page_not_found("Site")
-    
+
     query_site.site_visitors_total_count+=1
     db.session.commit()
     return query_site
