@@ -24,8 +24,6 @@ csrf_protect = CSRFProtect()
 mail = Mail()
 migrate = Migrate()
 gravatar = None
-# cache = Cache(config=cache_config)
-
 
 def init_data():
     """Initialize site data"""
