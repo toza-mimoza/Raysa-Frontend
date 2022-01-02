@@ -15,7 +15,11 @@ def get_site():
     if not query_site:
         return page_not_found("Site")
 
+<<<<<<< HEAD
     query_site.site_visitors_total_count += 1
+=======
+    query_site.site_visitors_total_count+=1
+>>>>>>> 327f879d76ba5cf776249bed536d64072690f323
     db.session.commit()
     return query_site
 
@@ -49,5 +53,10 @@ def before_request():
 
 @site_blueprint.route("/backend")
 def backend():
+<<<<<<< HEAD
     """Redirects to the admin panel page at '/admin'."""
     return redirect("admin")
+=======
+    '''Redirects to the admin panel page at '/admin'.'''
+    return redirect('admin')
+>>>>>>> 327f879d76ba5cf776249bed536d64072690f323
