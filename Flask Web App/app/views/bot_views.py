@@ -16,14 +16,14 @@ LOG_FILE = "logs/Art Chatbot.log"
 
 
 @bot_blueprint.route("/bots")
-def index():
-    """Returns a template for the index page."""
+def show_all_bots():
+    """Returns a template for the show_all_bots page."""
     bots_list = []
 
     for qbot in Bots.query.all():
         bots_list.append(qbot)
 
-    return render_template("bots.html", bots_list=bots_list)
+    return render_template("bots/bots.html", bots_list=bots_list)
 
 
 @bot_blueprint.route("/train/<bot_name>")
@@ -104,7 +104,7 @@ def show_statistics_for_all():
 
     bot_stats_list = Statistics.query.all()
 
-    return render_template("bots/stats_all.html", bot_stats_list)
+    return render_template("bots/stats_all.html", bot_stats_list=bot_stats_list)
 
 
 @bot_blueprint.route("/statistics/<bot_name>")

@@ -25,6 +25,7 @@ mail = Mail()
 migrate = Migrate()
 gravatar = None
 
+
 def init_data():
     """Initialize site data"""
     if not Site.query.filter(Site.site_name == INIT_SITE_NAME).first():
