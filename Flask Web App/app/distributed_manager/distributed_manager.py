@@ -38,7 +38,7 @@ class DistributedManager:
         self.bot_url_list = bot_url_list
 
     def send_request_to(self, url, body, headers=None):
-        if headers is not None:
+        if headers is None:
             return requests.post(url, json=body)
         else:
             return requests.post(url, headers=headers, json=body)
