@@ -1,5 +1,8 @@
 // Collapsible
 var coll = document.getElementsByClassName("collapsible");
+// var namespace = '';
+var socket;
+connectToSocket();
 
 for (let i = 0; i < coll.length; i++) {
     coll[i].addEventListener("click", function () {
@@ -15,9 +18,16 @@ for (let i = 0; i < coll.length; i++) {
 
         // set focus on the text input field
         $("#textInput").focus();
+
     });
 }
-
+function connectToSocket(){
+  socket = io.connect('http://' + document.domain + ':' + location.port);
+  socket.on('connect', function() {
+      socket.send('User has connected!');
+  });
+  // console.log("Connected to the socket.")
+}
 function getTime() {
     let today = new Date();
     hours = today.getHours();
@@ -64,6 +74,8 @@ function getResponse() {
     if (userText == "") {
         userText = "I don't know what to ask you...";
     }
+
+    socket.emit('UserSendsMessage', userText);
 
     let userHtml = '<p class="userText"><span>' + userText + '</span></p>';
 

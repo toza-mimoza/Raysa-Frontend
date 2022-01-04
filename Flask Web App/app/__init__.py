@@ -17,6 +17,7 @@ from .views import register_blueprints
 from app.common.extensions import cache
 from flask_admin import Admin
 from flask_admin.contrib.sqla import ModelView
+from flask_socketio import SocketIO
 
 # Instantiate Flask extensions
 csrf_protect = CSRFProtect()
@@ -108,6 +109,11 @@ def create_app(extra_config_settings={}):
 
     app.config["FLASK_ADMIN_SWATCH"] = "cerulean"
 
+    # Initalize app as socketio instance
+    socketio = SocketIO(
+        app, cors_allowed_origins="http://127.0.0.1:5000"
+    )  # , cors_allowed_origins="http://127.0.0.1:5000")
+
     admin = Admin(app, name="Raysa", template_mode="bootstrap3")
     admin.add_view(ModelView(User, db.session))
     admin.add_view(ModelView(Bots, db.session))
@@ -186,7 +192,7 @@ def create_app(extra_config_settings={}):
     def inject_user():
         return dict(user=current_user)
 
-    return app
+    return app, socketio
 
 
 def init_email_error_handler(app):
