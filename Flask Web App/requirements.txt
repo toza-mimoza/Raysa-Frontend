@@ -20,6 +20,7 @@ backcall @ file:///home/ktietz/src/ci/backcall_1611930011877/work
 backports.shutil-get-terminal-size @ file:///tmp/build/80754af9/backports.shutil_get_terminal_size_1608222128777/work
 bcrypt==3.2.0
 beautifulsoup4 @ file:///tmp/build/80754af9/beautifulsoup4_1631874778482/work
+bidict==0.21.4
 binaryornot @ file:///tmp/build/80754af9/binaryornot_1617751525010/work
 bitarray @ file:///tmp/build/80754af9/bitarray_1629132842469/work
 bkcharts==0.2
@@ -57,7 +58,7 @@ decorator @ file:///tmp/build/80754af9/decorator_1632776554403/work
 defusedxml @ file:///tmp/build/80754af9/defusedxml_1615228127516/work
 diff-match-patch @ file:///Users/ktietz/demo/mc3/conda-bld/diff-match-patch_1630511840874/work
 distributed @ file:///tmp/build/80754af9/distributed_1635968201545/work
-dnspython==2.1.0
+dnspython==1.16.0
 docopt==0.6.2
 docutils @ file:///tmp/build/80754af9/docutils_1638527852763/work
 dominate==2.6.0
@@ -75,15 +76,20 @@ Flask-Login==0.5.0
 Flask-Mail==0.9.1
 Flask-Migrate==3.1.0
 Flask-Script==2.0.6
+Flask-SocketIO==5.1.1
 Flask-SQLAlchemy==2.5.1
 Flask-User==1.0.2.2
 Flask-WTF==1.0.0
 fonttools==4.25.0
 fsspec @ file:///tmp/build/80754af9/fsspec_1636116461911/work
-gevent @ file:///tmp/build/80754af9/gevent_1628265585516/work
+gevent==21.12.0
+gevent-socketio==0.3.6
+gevent-websocket==0.10.1
 glob2 @ file:///home/linux1/recipes/ci/glob2_1610991677669/work
 gmpy2==2.0.8
 greenlet==1.1.2
+gunicorn==20.1.0
+h11==0.12.0
 h5py==2.10.0
 HeapDict @ file:///Users/ktietz/demo/mc3/conda-bld/heapdict_1630598515714/work
 html5lib @ file:///Users/ktietz/demo/mc3/conda-bld/html5lib_1629144453894/work
@@ -201,10 +207,12 @@ PySocks @ file:///tmp/build/80754af9/pysocks_1594394576006/work
 pytest==6.2.5
 python-dateutil @ file:///tmp/build/80754af9/python-dateutil_1626374649649/work
 python-dotenv==0.19.2
+python-engineio==4.3.0
 python-lsp-black @ file:///tmp/build/80754af9/python-lsp-black_1634232156041/work
 python-lsp-jsonrpc==1.0.0
 python-lsp-server==1.2.4
 python-slugify @ file:///tmp/build/80754af9/python-slugify_1620405669636/work
+python-socketio==5.5.0
 pytz==2021.3
 PyWavelets @ file:///tmp/build/80754af9/pywavelets_1601658308664/work
 pyxdg @ file:///tmp/build/80754af9/pyxdg_1603822279816/work
@@ -227,6 +235,7 @@ scipy @ file:///tmp/build/80754af9/scipy_1630606797510/work
 seaborn @ file:///tmp/build/80754af9/seaborn_1629307859561/work
 SecretStorage @ file:///tmp/build/80754af9/secretstorage_1614022884812/work
 Send2Trash @ file:///tmp/build/80754af9/send2trash_1632406701022/work
+simple-websocket==0.5.0
 simplegeneric==0.8.1
 singledispatch @ file:///tmp/build/80754af9/singledispatch_1629321204894/work
 six @ file:///tmp/build/80754af9/six_1623709665295/work
@@ -279,6 +288,7 @@ Werkzeug @ file:///tmp/build/80754af9/werkzeug_1635505089296/work
 whichcraft @ file:///tmp/build/80754af9/whichcraft_1617751293875/work
 widgetsnbextension==3.5.1
 wrapt==1.12.1
+wsproto==1.0.0
 WTForms==3.0.0
 wurlitzer @ file:///tmp/build/80754af9/wurlitzer_1638368164445/work
 xlrd @ file:///tmp/build/80754af9/xlrd_1608072521494/work
