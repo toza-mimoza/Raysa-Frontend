@@ -16,3 +16,6 @@ commands_list.txt
 # ignore flask .env and .flaskenv
 .env
 .flaskenv
+
+# ignore logging config for now, Flask has its own Python logging configuration
+logging_config
