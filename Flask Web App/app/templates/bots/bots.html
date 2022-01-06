@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% block title %}Bots overview{% endblock %}
 {% block content %}
-  <h1>Bots overview</h1>
+  <h1 class="text-center">Bots overview</h1>
     {% if not bots_list %}
     <h3>No bots currently exist.</h3>
     {% endif %}
@@ -24,5 +24,5 @@
       {% endfor %}
 
     </div>
-    
+
 {% endblock %}
