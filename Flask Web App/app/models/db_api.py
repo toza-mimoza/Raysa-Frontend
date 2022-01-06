@@ -11,8 +11,8 @@ def get_password_manager(app):
 
 def add_tag_to_bot(tag_name):
     """Add actor to the DB."""
-    tag = Tags()
-    db.session.add(tag_name=tag_name)
+    tag = Tags(tag_name=tag_name)
+    db.session.add(tag)
     db.session.commit()
     return tag
 
