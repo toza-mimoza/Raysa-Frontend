@@ -18,4 +18,4 @@ commands_list.txt
 .flaskenv
 
 # ignore logging config for now, Flask has its own Python logging configuration
-logging_config
+# logging_config
