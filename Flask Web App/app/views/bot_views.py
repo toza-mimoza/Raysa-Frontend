@@ -6,7 +6,7 @@ from flask import Response
 from app.models.bot_models import Bots, Statistics
 
 from app.views.error_views import page_not_found
-from app.util import check_if_bot_exists
+from app.util.util import check_if_bot_exists
 from pygtail import Pygtail
 import time
 

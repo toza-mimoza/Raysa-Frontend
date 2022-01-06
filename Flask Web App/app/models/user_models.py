@@ -4,6 +4,7 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField, validators
 from .db import db, BaseModel
 
+
 # Define the User data model. Make sure to add the flask_user.UserMixin !!
 class User(BaseModel, UserMixin):
     __tablename__ = "users"
@@ -17,7 +18,7 @@ class User(BaseModel, UserMixin):
     email_confirmed_at = db.Column(db.DateTime())
     password = db.Column(db.String(255), nullable=False, server_default="")
     # reset_password_token = db.Column(db.String(100), nullable=False, server_default='')
-    active = db.Column(db.Boolean(), nullable=False, server_default="0")
+    # active = db.Column(db.Boolean(), nullable=False, server_default="0")
 
     # User information
     active = db.Column("is_active", db.Boolean(), nullable=False, server_default="0")
