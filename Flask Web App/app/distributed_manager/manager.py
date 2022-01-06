@@ -4,29 +4,32 @@
 #   file extraction (logs)
 #   on the other end there is an HTTP RESTful API for offering files to download
 #   SECURITY: implement token based authentication for RESTful service (API keys)
-import requests
+import requests, logging
 from flask_socketio import send, emit
 
 from .trackers import MessageTracker
 
 
+log = logging.getLogger(__name__)
+
+
 def init_handlers(socketio):
     @socketio.on("connect")
     def handle_connection():
-        print("Connected a client...")
+        log.info("Connected a client.")
         message_tracker = MessageTracker()
 
     @socketio.on("message")
     def handle_message(msg):
-        print(f"Client message: {msg}")
+        log.info(f"Client message: {msg}")
 
     @socketio.on("UserSendsMessage")
     def handle_user_message(msg):
-        print(f"User message: {msg}")
+        log.info(f"User message: {msg}")
 
 
 def ack_client():
-    print("Message was received by the client.")
+    log.info("Message was received by the client.")
 
 
 class DistributedManager:
