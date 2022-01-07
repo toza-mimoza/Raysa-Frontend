@@ -18,7 +18,7 @@ def index():
     """Returns a template for the index page."""
 
     query_site = Site.query.filter(
-        Site.site_name == os.getenv["INIT_SITE_NAME"]
+        Site.site_name == os.getenv("INIT_SITE_NAME")
     ).first()
     if query_site:
         query_site.site_visitors_total_count += 1
