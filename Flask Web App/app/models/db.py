@@ -5,22 +5,70 @@ from .db_exceptions import DBexception
 
 # Session.expire_on_commit = False
 db = SQLAlchemy()
-db.session.expire_on_commit = False
+
 log = logging.getLogger(__name__)
 
 
 class BaseMixin(object):
     @classmethod
     def create(cls, **kw):
+        """Create Crud operation."""
         obj = cls(**kw)
         try:
             db.session.add(obj)
             db.session.commit()
         except DBexception as e:
             log.critical(
-                f"{e.__class__.__name__}: The {obj.__class__.__name__} cannot be ADDED to DB."
+                f"{e.__class__.__name__}: The {obj.__class__.__name__} cannot be CREATED in DB."
             )
             raise
+
+    @classmethod
+    def retrieve(cls, **kw):
+        """Retrieve cRud operation."""
+        instance = db.session.query(cls).filter_by(**kw).first()
+        log.info(
+            f"An instance of {instance.__class__.__name__} is being RETRIEVED from the DB."
+        )
+        return instance
+
+    @classmethod
+    def update(cls, **kw):
+        """Update crUd operation."""
+        instance = db.session.query(cls).filter_by(**kw).first()
+        if instance:
+            try:
+                db.session.add(instance)
+                db.session.commit()
+                log.info(
+                    f"An instance of {instance.__class__.__name__} is UPDATED in the DB."
+                )
+            except DBexception as e:
+                log.critical(
+                    f"{e.__class__.__name__}: The {instance.__class__.__name__} cannot be UPDATED in the DB."
+                )
+            return True
+        else:
+            return False
+
+    @classmethod
+    def delete(cls, **kw):
+        """Delete cruD operation."""
+        instance = db.session.query(cls).filter_by(**kw).first()
+        if instance:
+            try:
+                db.session.delete(instance)
+                db.session.commit()
+                log.info(
+                    f"An instance of {instance.__class__.__name__} is DELETED from DB."
+                )
+            except DBexception as e:
+                log.critical(
+                    f"{e.__class__.__name__}: The {instance.__class__.__name__} cannot be DELETED from DB."
+                )
+            return True
+        else:
+            return False
 
 
 class BaseModel(db.Model, BaseMixin):
