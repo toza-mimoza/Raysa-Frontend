@@ -2,9 +2,9 @@ version: 1
 disable_existing_loggers: true
 formatters:
   hiformat:
-    format: '[%(levelname)s] - %(asctime)s - %(name)s - %(message)s'
+    format: '[%(levelname)s] - %(asctime)s - %(name)s on %(lineno)d - %(message)s'
   simple:
-    format: '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+    format: '[%(levelname)s] - %(asctime)s - %(name)s - %(message)s'
 handlers:
   app_console:
     class: logging.StreamHandler
@@ -37,15 +37,15 @@ loggers:
     level: DEBUG
     handlers: [app_console]
     propagate: no
-  app_file:
-    level: DEBUG
-    handlers: [app_file]
-    propagate: no
-
-  werkzeug:
-    level: DEBUG
-    handlers: [werkzeug_file, werkzeug_console]
-    propagate: no
+  # app_file:
+  #   level: DEBUG
+  #   handlers: [app_file]
+  #   propagate: no
+  #
+  # werkzeug:
+  #   level: DEBUG
+  #   handlers: [werkzeug_file, werkzeug_console]
+  #   propagate: no
 root:
   level: DEBUG
   handlers: [app_console, app_file]
