@@ -14,6 +14,9 @@ log = logging.getLogger(__name__)
 
 
 def init_handlers(socketio):
+    dist_manager = DistributedManager(bot_url_dict={})
+    STUB_RESPONSE = "STUB_RESPONSE"
+
     @socketio.on("connect")
     def handle_connection():
         log.info("Connected a client.")
@@ -27,8 +30,9 @@ def init_handlers(socketio):
     @socketio.on("UserSendsMessage")
     def handle_user_message(msg):
         log.info(f"User message: {msg}")
-        emit("response_event", "STUB_RESPONSE")
-        log.info("Response emitted: STUB_RESPONSE")
+        # response = dist_manager.send_request_to(url, body)
+        emit("response_event", STUB_RESPONSE)  # response.text
+        log.info(f"Response emitted: {STUB_RESPONSE}")  # response.text
         pass
 
 
