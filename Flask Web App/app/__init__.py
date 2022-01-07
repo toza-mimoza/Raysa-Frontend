@@ -1,6 +1,7 @@
 # __init__.py is a special Python file that allows a directory to become
 # a Python package so it can be accessed using the 'import' statement.
 
+import os
 from flask import Flask
 from flask_mail import Mail
 from flask_migrate import Migrate
@@ -12,7 +13,6 @@ from .models.bot_models import Bots, Conversations, Messages
 from .models.user_models import User, Role
 from .models.site_models import Site
 import datetime
-from .secrets_file import *
 from .views import register_blueprints
 from app.common.extensions import cache
 from flask_admin import Admin
@@ -31,9 +31,9 @@ gravatar = None
 
 def init_data():
     """Initialize site data"""
-    if not Site.query.filter(Site.site_name == INIT_SITE_NAME).first():
+    if not Site.query.filter(Site.site_name == os.getenv("INIT_SITE_NAME")).first():
         site = Site(
-            site_name=INIT_SITE_NAME,
+            site_name=os.getenv("INIT_SITE_NAME"),
             site_description="This is a currently ongoing project of building \
             distributed Rasa chatbots with Ray distributed functions library, \
             hence the project name Raysa.",
@@ -43,52 +43,52 @@ def init_data():
         db.session.add(site)
         db.session.commit()
 
-    if not Bots.query.filter(Bots.bot_name == INIT_BOT_NAME1).first():
+    if not Bots.query.filter(Bots.bot_name == os.getenv("INIT_BOT_NAME1")).first():
         bot1 = Bots(
-            bot_name=INIT_BOT_NAME1,
-            bot_description=INIT_BOT_DESCRIPTION,
+            bot_name=os.getenv("INIT_BOT_NAME1"),
+            bot_description=os.getenv("INIT_BOT_DESCRIPTION"),
             bot_added_at=datetime.datetime.utcnow(),
-            vm_name=INIT_VM_NAME_1,
-            vm_type=INIT_VM_TYPE_1,
-            vm_res_group=INIT_VM_RES_GROUP1,
-            vm_ip=INIT_VM_IP_1,
-            vm_vcpu=INIT_VM_VCPU1,
-            vm_region=INIT_VM_REGION,
-            vm_ram=INIT_VM_RAM1,
+            vm_name=os.getenv("INIT_VM_NAME_1"),
+            vm_type=os.getenv("INIT_VM_TYPE_1"),
+            vm_res_group=os.getenv("INIT_VM_RES_GROUP1"),
+            vm_ip=os.getenv("INIT_VM_IP_1"),
+            vm_vcpu=os.getenv("INIT_VM_VCPU1"),
+            vm_region=os.getenv("INIT_VM_REGION"),
+            vm_ram=os.getenv("INIT_VM_RAM1"),
         )
 
         db.session.add(bot1)
         db.session.commit()
 
-    if not Bots.query.filter(Bots.bot_name == INIT_BOT_NAME2).first():
+    if not Bots.query.filter(Bots.bot_name == os.getenv("INIT_BOT_NAME2")).first():
         bot2 = Bots(
-            bot_name=INIT_BOT_NAME2,
-            bot_description=INIT_BOT_DESCRIPTION,
+            bot_name=os.getenv("INIT_BOT_NAME2"),
+            bot_description=os.getenv("INIT_BOT_DESCRIPTION"),
             bot_added_at=datetime.datetime.utcnow(),
-            vm_name=INIT_VM_NAME_2,
-            vm_type=INIT_VM_TYPE_2,
-            vm_res_group=INIT_VM_RES_GROUP2,
-            vm_ip=INIT_VM_IP_2,
-            vm_vcpu=INIT_VM_VCPU2,
-            vm_region=INIT_VM_REGION,
-            vm_ram=INIT_VM_RAM2,
+            vm_name=os.getenv("INIT_VM_NAME_2"),
+            vm_type=os.getenv("INIT_VM_TYPE_2"),
+            vm_res_group=os.getenv("INIT_VM_RES_GROUP2"),
+            vm_ip=os.getenv("INIT_VM_IP_2"),
+            vm_vcpu=os.getenv("INIT_VM_VCPU2"),
+            vm_region=os.getenv("INIT_VM_REGION"),
+            vm_ram=os.getenv("INIT_VM_RAM2"),
         )
 
         db.session.add(bot2)
         db.session.commit()
 
-    if not Bots.query.filter(Bots.bot_name == INIT_BOT_NAME3).first():
+    if not Bots.query.filter(Bots.bot_name == os.getenv("INIT_BOT_NAME3")).first():
         bot3 = Bots(
-            bot_name=INIT_BOT_NAME3,
-            bot_description=INIT_BOT_DESCRIPTION,
+            bot_name=os.getenv("INIT_BOT_NAME3"),
+            bot_description=os.getenv("INIT_BOT_DESCRIPTION"),
             bot_added_at=datetime.datetime.utcnow(),
-            vm_name=INIT_VM_NAME_3,
-            vm_type=INIT_VM_TYPE_3,
-            vm_res_group=INIT_VM_RES_GROUP3,
-            vm_ip=INIT_VM_IP_3,
-            vm_vcpu=INIT_VM_VCPU3,
-            vm_region=INIT_VM_REGION,
-            vm_ram=INIT_VM_RAM3,
+            vm_name=os.getenv("INIT_VM_NAME_3"),
+            vm_type=os.getenv("INIT_VM_TYPE_3"),
+            vm_res_group=os.getenv("INIT_VM_RES_GROUP3"),
+            vm_ip=os.getenv("INIT_VM_IP_3"),
+            vm_vcpu=os.getenv("INIT_VM_VCPU3"),
+            vm_region=os.getenv("INIT_VM_REGION"),
+            vm_ram=os.getenv("INIT_VM_RAM3"),
         )
 
         db.session.add(bot3)
@@ -106,15 +106,20 @@ def create_app(extra_config_settings={}):
     app.config.from_object("app.settings")
     # Load environment specific settings
     app.config.from_object("app.local_settings")
+
+    # Load .env file if in PRODUCTION
+    if app.config["DEBUG"] is False:
+        from dotenv import load_dotenv
+
+        load_dotenv(".env")
+
     # Load extra settings from extra_config_settings param
     app.config.update(extra_config_settings)
 
     app.config["FLASK_ADMIN_SWATCH"] = "cerulean"
 
     # Initalize app as socketio instance
-    socketio = SocketIO(
-        app, cors_allowed_origins="http://127.0.0.1:5000"
-    )  # , cors_allowed_origins="http://127.0.0.1:5000")
+    socketio = SocketIO(app, cors_allowed_origins="http://127.0.0.1:5000")
     init_handlers(socketio)
 
     if app.config["DEBUG"] is False:
@@ -177,11 +182,11 @@ def create_app(extra_config_settings={}):
 
     with app.app_context():
         init_data()
-        if not User.query.filter(User.email == SMTP_MAIL_USERNAME).first():
+        if not User.query.filter(User.email == app.config["MAIL_USERNAME"]).first():
             user = User(
-                email=SMTP_MAIL_USERNAME,
+                email=app.config["MAIL_USERNAME"],
                 email_confirmed_at=datetime.datetime.utcnow(),
-                password=user_manager.hash_password(SMTP_MAIL_PASS),
+                password=user_manager.hash_password(app.config["MAIL_PASSWORD"]),
                 active=True,
                 first_name="Svetozar",
                 last_name="Stojanovic",

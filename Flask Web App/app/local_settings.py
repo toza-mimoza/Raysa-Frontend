@@ -1,21 +1,8 @@
-# import os
+import os
 
 # *****************************
 # Environment specific settings
 # *****************************
-from .secrets_file import (
-    ADMIN_USERNAME,
-    ADMIN_FULL_NAME,
-    POSTGRESQL_DB_USER,
-    POSTGRESQL_DB_NAME,
-    POSTGRESQL_DB_PASS,
-    POSTGRESQL_DB_HOST,
-    POSTGRESQL_DB_PORT,
-    API_KEY_SENDGRID,
-    SMTP_MAIL_USERNAME,
-    SMTP_MAIL_PASS,
-)
-from .settings import APP_NAME
 
 # DO NOT use "DEBUG = True" in production environments
 DEBUG = True
@@ -23,15 +10,15 @@ DEBUG = True
 # DO NOT use Unsecure Secrets in production environments
 # Generate a safe one with:
 #     python -c "import os; print repr(os.urandom(24));"
-SECRET_KEY = "This is an UNSECURE Secret. CHANGE THIS for production environments."
+SECRET_KEY = os.getenv("SECRET_KEY")
 
 # DB settings
 POSTGRES = {
-    "user": POSTGRESQL_DB_USER,
-    "pw": POSTGRESQL_DB_PASS,
-    "db": POSTGRESQL_DB_NAME,
-    "host": POSTGRESQL_DB_HOST,
-    "port": POSTGRESQL_DB_PORT,
+    "user": os.getenv("POSTGRESQL_DB_USER"),
+    "pw": os.getenv("POSTGRESQL_DB_PASS"),
+    "db": os.getenv("POSTGRESQL_DB_NAME"),
+    "host": os.getenv("POSTGRESQL_DB_HOST"),
+    "port": os.getenv("POSTGRESQL_DB_PORT"),
 }
 
 # SQLAlchemy settings
@@ -50,17 +37,19 @@ MAIL_SERVER = "smtp.gmail.com"
 MAIL_PORT = 587
 MAIL_USE_SSL = False
 MAIL_USE_TLS = True
-MAIL_USERNAME = SMTP_MAIL_USERNAME
-MAIL_PASSWORD = SMTP_MAIL_PASS
+MAIL_USERNAME = os.getenv("SMTP_MAIL_USERNAME")
+MAIL_PASSWORD = os.getenv("SMTP_MAIL_PASS")
 
 # Sendgrid settings
-SENDGRID_API_KEY = API_KEY_SENDGRID
+SENDGRID_API_KEY = os.getenv("API_KEY_SENDGRID")
 
 # Flask-User settings
-USER_APP_NAME = APP_NAME
-USER_EMAIL_SENDER_NAME = ADMIN_FULL_NAME
-USER_EMAIL_SENDER_EMAIL = SMTP_MAIL_USERNAME
+USER_APP_NAME = os.getenv("APP_NAME")
+USER_EMAIL_SENDER_NAME = os.getenv("ADMIN_USERNAME")
+USER_EMAIL_SENDER_EMAIL = os.getenv("SMTP_MAIL_USERNAME")
 
 ADMINS = [
-    "{admin} <{email}>".format(admin=ADMIN_USERNAME, email=SMTP_MAIL_USERNAME),
+    "{admin} <{email}>".format(
+        admin=os.getenv("ADMIN_USERNAME"), email=os.getenv("SMTP_MAIL_USERNAME")
+    ),
 ]
