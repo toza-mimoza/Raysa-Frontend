@@ -31,8 +31,15 @@ gravatar = None
 
 def init_data():
     """Initialize site data"""
+
+    # first flush all bots data
+    all_bots = Bots.query.all()
+    for bot in all_bots:
+        db.session.delete(bot)
+        db.session.commit()
+
     if not Site.query.filter(Site.site_name == os.getenv("INIT_SITE_NAME")).first():
-        site = Site(
+        Site.create(
             site_name=os.getenv("INIT_SITE_NAME"),
             site_description="This is a currently ongoing project of building \
             distributed Rasa chatbots with Ray distributed functions library, \
@@ -40,11 +47,8 @@ def init_data():
             site_visitors_total_count=0,
         )
 
-        db.session.add(site)
-        db.session.commit()
-
     if not Bots.query.filter(Bots.bot_name == os.getenv("INIT_BOT_NAME1")).first():
-        bot1 = Bots(
+        Bots.create(
             bot_name=os.getenv("INIT_BOT_NAME1"),
             bot_description=os.getenv("INIT_BOT_DESCRIPTION"),
             bot_added_at=datetime.datetime.utcnow(),
@@ -57,11 +61,8 @@ def init_data():
             vm_ram=os.getenv("INIT_VM_RAM1"),
         )
 
-        db.session.add(bot1)
-        db.session.commit()
-
     if not Bots.query.filter(Bots.bot_name == os.getenv("INIT_BOT_NAME2")).first():
-        bot2 = Bots(
+        Bots.create(
             bot_name=os.getenv("INIT_BOT_NAME2"),
             bot_description=os.getenv("INIT_BOT_DESCRIPTION"),
             bot_added_at=datetime.datetime.utcnow(),
@@ -74,11 +75,8 @@ def init_data():
             vm_ram=os.getenv("INIT_VM_RAM2"),
         )
 
-        db.session.add(bot2)
-        db.session.commit()
-
     if not Bots.query.filter(Bots.bot_name == os.getenv("INIT_BOT_NAME3")).first():
-        bot3 = Bots(
+        Bots.create(
             bot_name=os.getenv("INIT_BOT_NAME3"),
             bot_description=os.getenv("INIT_BOT_DESCRIPTION"),
             bot_added_at=datetime.datetime.utcnow(),
@@ -90,9 +88,6 @@ def init_data():
             vm_region=os.getenv("INIT_VM_REGION"),
             vm_ram=os.getenv("INIT_VM_RAM3"),
         )
-
-        db.session.add(bot3)
-        db.session.commit()
 
 
 # Initialize Flask Application
@@ -137,6 +132,7 @@ def create_app(extra_config_settings={}):
     # Setup Flask-SQLAlchemy
     db.init_app(app)
     # db.create_all()
+
     global gravatar
     gravatar = Gravatar(
         app,

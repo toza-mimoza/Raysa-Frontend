@@ -1,10 +1,29 @@
+import logging
 from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy_serializer import SerializerMixin
+from sqlalchemy.orm.session import Session, sessionmaker
+from .db_exceptions import DBexception
 
+# Session.expire_on_commit = False
 db = SQLAlchemy()
+db.session.expire_on_commit = False
+log = logging.getLogger(__name__)
 
 
-class BaseModel(db.Model, SerializerMixin):
+class BaseMixin(object):
+    @classmethod
+    def create(cls, **kw):
+        obj = cls(**kw)
+        try:
+            db.session.add(obj)
+            db.session.commit()
+        except DBexception as e:
+            log.critical(
+                f"{e.__class__.__name__}: The {obj.__class__.__name__} cannot be ADDED to DB."
+            )
+            raise
+
+
+class BaseModel(db.Model, BaseMixin):
     """Base data model for all objects"""
 
     __abstract__ = True
