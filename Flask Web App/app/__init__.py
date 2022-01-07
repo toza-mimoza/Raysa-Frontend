@@ -19,7 +19,7 @@ from flask_admin import Admin
 from flask_admin.contrib.sqla import ModelView
 from flask_socketio import SocketIO
 from .distributed_manager.manager import init_handlers
-from .logging_config.logging_config import init_logging
+from .logging_config.logging_config import init_prod_logging, init_dev_logging
 
 # Instantiate Flask extensions
 csrf_protect = CSRFProtect()
@@ -116,7 +116,11 @@ def create_app(extra_config_settings={}):
         app, cors_allowed_origins="http://127.0.0.1:5000"
     )  # , cors_allowed_origins="http://127.0.0.1:5000")
     init_handlers(socketio)
-    init_logging()
+
+    if app.config["DEBUG"] is False:
+        init_prod_logging()
+    else:
+        init_dev_logging()
 
     admin = Admin(app, name="Raysa", template_mode="bootstrap3")
     admin.add_view(ModelView(User, db.session))
