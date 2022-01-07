@@ -59,13 +59,13 @@ function firstBotMessage() {
 firstBotMessage();
 
 // Retrieves the response
-function getHardResponse(userText) {
-    let botResponse = getBotResponse(userText);
-    let botHtml = '<p class="botText"><span>' + botResponse + '</span></p>';
-    $("#chatbox").append(botHtml);
-
-    document.getElementById("chat-bar-bottom").scrollIntoView(true);
-}
+// function getHardResponse(userText) {
+//     let botResponse = getBotResponse(userText);
+//     let botHtml = '<p class="botText"><span>' + botResponse + '</span></p>';
+//     $("#chatbox").append(botHtml);
+//
+//     document.getElementById("chat-bar-bottom").scrollIntoView(true);
+// }
 
 //Gets the text text from the input box and processes it
 function getResponse() {
@@ -77,6 +77,12 @@ function getResponse() {
 
     socket.emit('UserSendsMessage', userText);
 
+    responseText = ""
+    socket.on('response_event', function(msg){
+       console.log('Message received:', msg);
+       responseText=msg
+    });
+
     let userHtml = '<p class="userText"><span>' + userText + '</span></p>';
 
     $("#textInput").val("");
@@ -84,8 +90,12 @@ function getResponse() {
     document.getElementById("chat-bar-bottom").scrollIntoView(true);
 
     setTimeout(() => {
-        getHardResponse(userText);
-    }, 1000)
+      console.log("Response is: "+responseText+".")
+      let botHtml = '<p class="botText"><span>' + responseText + '</span></p>';
+      $("#chatbox").append(botHtml);
+      document.getElementById("chat-bar-bottom").scrollIntoView(true);
+      return responseText;
+    }, 500)
 
 }
 
