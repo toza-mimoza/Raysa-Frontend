@@ -3,6 +3,15 @@ from time import mktime
 
 from app.models.bot_models import Bots
 
+import pandas as pd
+
+
+def load_dict_from_csv(filename):
+    return {row[0]: row[1] for _, row in pd.read_csv(filename).iterrows()}
+
+
+dict_questions = load_dict_from_csv("app/util/sample_questions.csv")
+
 
 def check_if_bot_exists(query_name) -> bool:
     """Query DB for the Bot"""
@@ -25,3 +34,15 @@ def get_by_name_from_list(query, list):
         if query == item.name:
             return item
     return None
+
+
+def remove_quotes_from_str(string: str) -> str:
+    return string.replace('"', "")
+
+
+def remove_quotes_around_str(string: str) -> str:
+    if string.startswith('"'):
+        string = string[1:]
+    if string.endswith('"'):
+        string = string[:-1]
+    return string

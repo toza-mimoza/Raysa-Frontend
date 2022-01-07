@@ -1,27 +1,42 @@
 // Collapsible
 var coll = document.getElementsByClassName("collapsible");
-// var namespace = '';
 var socket;
 connectToSocket();
+setOnChatClickListener();
+getFirstBotMessage();
+setOnEnterPress();
 
-for (let i = 0; i < coll.length; i++) {
-    coll[i].addEventListener("click", function () {
-        this.classList.toggle("active");
 
-        var content = this.nextElementSibling;
+function setOnChatClickListener(){
+  for (let i = 0; i < coll.length; i++) {
+      coll[i].addEventListener("click", function () {
+          this.classList.toggle("active");
 
-        if (content.style.maxHeight) {
-            content.style.maxHeight = null;
-        } else {
-            content.style.maxHeight = content.scrollHeight + "px";
-        }
-        // change title of conversation window
-        $("#chat-button").html('Raysa Chatbot Cluster');
-        // set focus on the text input field
-        $("#textInput").focus();
+          var content = this.nextElementSibling;
 
-    });
+          if (content.style.maxHeight) {
+              content.style.maxHeight = null;
+          } else {
+              content.style.maxHeight = content.scrollHeight + "px";
+          }
+          // change title of conversation window
+          $("#chat-button").html('Raysa Chatbot Cluster');
+          // set focus on the text input field
+          $("#textInput").focus();
+
+      });
+  }
 }
+
+function setOnEnterPress(){
+  // Press enter to send a message
+  $("#textInput").keypress(function (e) {
+      if (e.which == 13) {
+          getResponse();
+      }
+  });
+}
+
 function connectToSocket(){
   socket = io.connect('http://' + document.domain + ':' + location.port);
   socket.on('connect', function() {
@@ -29,6 +44,7 @@ function connectToSocket(){
   });
   // console.log("Connected to the socket.")
 }
+
 function getTime() {
     let today = new Date();
     hours = today.getHours();
@@ -47,7 +63,7 @@ function getTime() {
 }
 
 // Gets the first message
-function firstBotMessage() {
+function getFirstBotMessage() {
     let firstMessage = "How's it going?"
     document.getElementById("botStarterMessage").innerHTML = '<p class="botText"><span>' + firstMessage + '</span></p>';
 
@@ -57,71 +73,60 @@ function firstBotMessage() {
     document.getElementById("userInput").scrollIntoView(false);
 }
 
-firstBotMessage();
-
-// Retrieves the response
-// function getHardResponse(userText) {
-//     let botResponse = getBotResponse(userText);
-//     let botHtml = '<p class="botText"><span>' + botResponse + '</span></p>';
-//     $("#chatbox").append(botHtml);
-//
-//     document.getElementById("chat-bar-bottom").scrollIntoView(true);
-// }
-
 //Gets the text text from the input box and processes it
 function getResponse() {
+    // get user input
     let userText = $("#textInput").val();
 
+    // if user did not type anything
     if (userText == "") {
-        userText = "I don't know what to ask you...";
+        // request from server a random question from dict_questions in util.py
+        socket.emit('request_question_event');
     }
 
+    socket.on('response_question_event', function(msg){
+       // console.log('User received:', msg);
+       userText=msg
+       console.log(userText)
+    });
+
+    // send user text to server
     socket.emit('UserSendsMessage', userText);
 
+    // init response text
     responseText = ""
+
+    // wait for response
     socket.on('response_event', function(msg){
-       console.log('Message received:', msg);
+       console.log('User received:', msg);
        responseText=msg
     });
 
-    let userHtml = '<p class="userText"><span>' + userText + '</span></p>';
-
-    $("#textInput").val("");
-    $("#chatbox").append(userHtml);
-    document.getElementById("chat-bar-bottom").scrollIntoView(true);
-
     setTimeout(() => {
-      console.log("Response is: "+responseText+".")
+      // console.log("Response is: "+responseText+".")
+
+      // generate user text HTML
+      let userHtml = '<p class="userText"><span>' + userText + '</span></p>';
+
+      // delete input field
+      $("#textInput").val("");
+
+      // represent users
+      $("#chatbox").append(userHtml);
+      document.getElementById("chat-bar-bottom").scrollIntoView(true);
+
+      // console.log("Response is: "+responseText+".")
+      // represent response
       let botHtml = '<p class="botText"><span>' + responseText + '</span></p>';
       $("#chatbox").append(botHtml);
       document.getElementById("chat-bar-bottom").scrollIntoView(true);
-      return responseText;
+
     }, 500)
 
-}
-
-// Handles sending text via button clicks
-function buttonSendText(sampleText) {
-    let userHtml = '<p class="userText"><span>' + sampleText + '</span></p>';
-
-    $("#textInput").val("");
-    $("#chatbox").append(userHtml);
-    document.getElementById("chat-bar-bottom").scrollIntoView(true);
-
-    //Uncomment this if you want the bot to respond to this buttonSendText event
-    // setTimeout(() => {
-    //     getHardResponse(sampleText);
-    // }, 1000)
+    return responseText;
 }
 
 function sendButton() {
-    getResponse();
+  // on click send button
+  getResponse();
 }
-
-
-// Press enter to send a message
-$("#textInput").keypress(function (e) {
-    if (e.which == 13) {
-        getResponse();
-    }
-});
