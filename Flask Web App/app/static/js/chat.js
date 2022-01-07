@@ -15,7 +15,8 @@ for (let i = 0; i < coll.length; i++) {
         } else {
             content.style.maxHeight = content.scrollHeight + "px";
         }
-
+        // change title of conversation window
+        $("#chat-button").html('Raysa Chatbot Cluster');
         // set focus on the text input field
         $("#textInput").focus();
 
