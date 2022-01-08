@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template
-from flask import request
+from flask import request, json
 from flask_user import login_required, roles_required
 from flask import Response
 
@@ -101,10 +101,27 @@ def show_statistics_for_all():
     """Returns a template for conversations overview for a specific bot."""
 
     # get all bots from db
+    bots_list = Bots.query.all()
 
+    # get bot id list
+    bot_id_list = []
+    for bot in bots_list:
+        bot_id_list.append(bot.id)
+    # get all recorded statistics objects
     bot_stats_list = Statistics.query.all()
+    test_json_data = json.dumps([1, 2, 3])
+    test_json_labels = json.dumps(["12-31-18", "01-01-19", "01-02-19"])
 
-    return render_template("bots/stats_all.html", bot_stats_list=bot_stats_list)
+    print(test_json_data)
+    print(test_json_labels)
+    return render_template(
+        "bots/stats_all.html",
+        data=test_json_data,
+        labels=test_json_labels,
+        bots_list=bots_list,
+        bot_id_list=bot_id_list,
+        bot_stats_list=bot_stats_list,
+    )
 
 
 @bot_blueprint.route("/statistics/<bot_name>")

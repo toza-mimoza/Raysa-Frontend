@@ -27,3 +27,9 @@ body {
 #profile-card{
   width: 20rem;
 }
+
+/* center canvas */
+canvas{
+    display: block;
+    margin: 0 auto;
+}
