@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block title %}Stats {{cluster_name}}{% endblock %}
+{% block head %}
+  {{ super() }}
+{% endblock %}
+{% block content %}
+  <h1 class="text-center">Bot Statistics</h1>
+  <hr>
+  <div class="row" id="chartContainer">
+    {% block scripts %}
+    <!-- Here include only CDN scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.0/dist/chart.min.js"></script>
+    {% endblock %}
+    <script src="{{ url_for('static', filename='js/allBotsChart.js') }}"></script>
+
+    {% for bot in bots_list %}
+
+    <!-- {{loop.index0}} -->
+      <script>
+        initChart({{data[loop.index0]|safe}}, {{labels[loop.index0]|safe}}, "{{bot.bot_name|safe}}");
+      </script>
+    {% endfor %}
+  </div>
+
+
+{% endblock %}

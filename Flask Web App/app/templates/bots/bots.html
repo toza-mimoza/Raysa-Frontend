@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block title %}Bots overview{% endblock %}
+{% block content %}
+  <h1 class="text-center">Bots overview</h1>
+    {% if not bots_list %}
+    <h3>No bots currently exist.</h3>
+    {% endif %}
+    <div class="row mt-5 justify-content-center">
+      {% for bot in bots_list %}
+      <div class="card mb-4 m-3" style="width: 18rem;padding: 10px;">
+          <div class="card-body">
+              <h5 class="card-title">{{bot.bot_name}}</h5>
+              <h6 class="card-subtitle mb-2 text-muted">Added at: {{bot.bot_added_at}}</h6>
+              <p class="card-text">{{bot.bot_description}}</p>
+              <ul class="list-group list-group-flush">
+                  <li class="list-group-item">VM name: {{bot.vm_name}}</li>
+                  <li class="list-group-item">VM type: {{bot.vm_type}}</li>
+                  <li class="list-group-item">VM vCPU: {{bot.vm_vcpu}}</li>
+                  <li class="list-group-item">VM region: {{bot.vm_region}}</li>
+                  <li class="list-group-item">VM RAM: {{bot.vm_ram}}</li>
+                </ul>
+          </div>
+      </div>
+      {% endfor %}
+
+    </div>
+
+{% endblock %}

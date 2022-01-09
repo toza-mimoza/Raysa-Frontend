@@ -1,0 +1,35 @@
+html{
+  scroll-behavior: smooth;
+}
+body {
+    margin: 0 auto;
+    padding-top: 70px;
+    font-family: 'Inconsolata', monospace;
+}
+
+/* Modify the background color of the navigation bar */
+.navbar-custom {
+    background-color: indigo;
+}
+
+/* Modify brand and text color */
+.navbar-custom .navbar-brand,
+.navbar-custom .navbar-text,
+.navbar-custom a{
+    color: white;
+}
+
+#brandLogo{
+  height: 30px;
+  vertical-align: middle;
+}
+
+#profile-card{
+  width: 20rem;
+}
+
+/* center canvas */
+canvas{
+    display: block;
+    margin: 0 auto;
+}

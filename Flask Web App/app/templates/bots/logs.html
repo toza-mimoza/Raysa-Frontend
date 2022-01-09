@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% block title %}Logs {{bot_name}}{% endblock %}
+{% block head %}
+  {{ super() }}
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.1/css/bulma.min.css" />
+{% endblock %}
+{% block content %}
+  <h1 class="text-center">Live logs for {{bot_name}}</h1>
+  <section class="section">
+    <div class="container">
+      <div class="columns is-centered is-mobile">
+        <div class="column is-muted notification is-four-fifths">
+          <h1 class="title">{{bot.bot_name}}</h1>
+          <h2 class="subtitle"></h2>
+          <div id="progress"></div>
+        </div>
+      </div>
+    </div>
+    <div class="container">
+      <div class="columns is-centered is-mobile">
+        <div class="column is-dark notification is-four-fifths">
+          <div class="is-size-7 has-text-warning" id="display">
+            <ul id="display_list">
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+    </section>
+{% endblock %}
+
+{% block scripts %}
+  <script>
+    var source = new EventSource("/log");
+    source.onmessage = function(event) {
+      // $('#display').prepend(event.data);
+      $('#display_list').prepend('<li>'+event.data+'</li>');
+      if(event.data == 100){
+        source.close()
+      }
+    }
+
+    var source_progress = new EventSource("/progress");
+    source_progress.onmessage = function(event) {
+      $('#progress').text(event.data+'%');
+      $('#progress').val(event.data);
+      if(event.data == 100){
+        source_progress.close()
+      }
+    }
+  </script>
+{% endblock %}
