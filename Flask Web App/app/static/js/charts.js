@@ -2,7 +2,7 @@ var chartContainer = document.getElementById("chartContainer");
 var idCounter = 0;
 
 
-function initChart(data, labels, title){
+function createChart(data, labels, title){
   var divBootstrapColumn = document.createElement("div");
   var canvas = document.createElement("canvas");
   var titleElement = document.createElement("h3");
