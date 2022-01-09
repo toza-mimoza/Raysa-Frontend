@@ -9,5 +9,6 @@ Functionality:
     - [ ] receive assistant response and order it by confidence 
     - [ ] take the highest confidence response and present it to the user as an answer 
     - [x] user panel with widget and standalone chat view
+    - [ ] control panel for bot training and time measurements
 - Optional: 
-    - [x] Administrator panel with assistant statistics and logs    
+    - [x] Administrator panel with assistant statistics and ~~logs~~    
