@@ -117,6 +117,8 @@ def show_statistics_for_all():
     bot_data = []
     bot_labels = []
     # get past seven days of stats data for a bot
+    if not bots_list:
+        log.critical("No bots in DB, function cannot proceed.")
     for bot in bots_list:
         stats_objs = Statistics.retrieve_past_week(bot_id=bot.id)
         if stats_objs:
@@ -124,7 +126,10 @@ def show_statistics_for_all():
             temp_list_labels = []
             for stats in stats_objs:
                 temp_list_data.append(stats.num_requests_handled)
-                temp_list_labels.append(weekday_code_dict[stats.date_added.weekday()])
+                date = stats.date_added
+                weekday_verbose = weekday_code_dict[stats.date_added.weekday()]
+                label_temp = f"{weekday_verbose}, {date.day}.{date.month}.{date.year}"
+                temp_list_labels.append(label_temp)
             bot_data.append(temp_list_data)
             bot_labels.append(temp_list_labels)
             log.info(f"Statistics object for bot: {bot.bot_name} found!")
