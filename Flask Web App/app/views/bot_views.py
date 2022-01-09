@@ -9,8 +9,10 @@ from app.views.error_views import page_not_found
 from app.util.util import check_if_bot_exists
 from pygtail import Pygtail
 import time
+import logging
 
 bot_blueprint = Blueprint("bot", __name__, template_folder="templates")
+log = logging.getLogger(__name__)
 
 LOG_FILE = "logs/Art Chatbot.log"
 
@@ -103,24 +105,34 @@ def show_statistics_for_all():
     # get all bots from db
     bots_list = Bots.query.all()
 
-    # get bot id list
-    bot_id_list = []
+    weekday_code_dict = {
+        0: "Mon",
+        1: "Tue",
+        2: "Wed",
+        3: "Thu",
+        4: "Fri",
+        5: "Sat",
+        6: "Sun",
+    }
+    bot_data = []
+    bot_labels = []
+    # get past seven days of stats data for a bot
     for bot in bots_list:
-        bot_id_list.append(bot.id)
-    # get all recorded statistics objects
-    bot_stats_list = Statistics.query.all()
-    test_json_data = json.dumps([1, 2, 3])
-    test_json_labels = json.dumps(["12-31-18", "01-01-19", "01-02-19"])
-
-    print(test_json_data)
-    print(test_json_labels)
+        stats_objs = Statistics.retrieve_past_week(bot_id=bot.id)
+        if stats_objs:
+            temp_list_data = []
+            temp_list_labels = []
+            for stats in stats_objs:
+                temp_list_data.append(stats.num_requests_handled)
+                temp_list_labels.append(weekday_code_dict[stats.date_added.weekday()])
+            bot_data.append(temp_list_data)
+            bot_labels.append(temp_list_labels)
+            log.info(f"Statistics object for bot: {bot.bot_name} found!")
+        else:
+            log.warn(f"Statistics object for bot: {bot.bot_name} not found!")
+            pass
     return render_template(
-        "bots/stats_all.html",
-        data=test_json_data,
-        labels=test_json_labels,
-        bots_list=bots_list,
-        bot_id_list=bot_id_list,
-        bot_stats_list=bot_stats_list,
+        "bots/stats_all.html", data=bot_data, labels=bot_labels, bots_list=bots_list
     )
 
 

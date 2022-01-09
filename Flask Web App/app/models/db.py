@@ -1,6 +1,5 @@
 import logging
 from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy.orm.session import Session, sessionmaker
 from .db_exceptions import DBexception
 
 # Session.expire_on_commit = False
@@ -13,20 +12,32 @@ class BaseMixin(object):
     @classmethod
     def create(cls, **kw):
         """Create Crud operation."""
-        obj = cls(**kw)
+        instance = cls(**kw)
         try:
-            db.session.add(obj)
+            db.session.add(instance)
             db.session.commit()
         except DBexception as e:
             log.critical(
-                f"{e.__class__.__name__}: The {obj.__class__.__name__} cannot be CREATED in DB."
+                f"{e.__class__.__name__}: The {instance.__class__.__name__} cannot be CREATED in DB."
             )
             raise
+        return instance
 
     @classmethod
     def retrieve(cls, **kw):
         """Retrieve cRud operation."""
         instance = db.session.query(cls).filter_by(**kw).first()
+        log.info(
+            f"An instance of {instance.__class__.__name__} is being RETRIEVED from the DB."
+        )
+        return instance
+
+    @classmethod
+    def retrieve_all(cls, **kw):
+        """
+        Retrieve cRud operation returning a list of objects with common attribute specified by kw argument.
+        """
+        instance = db.session.query(cls).filter_by(**kw).all()
         log.info(
             f"An instance of {instance.__class__.__name__} is being RETRIEVED from the DB."
         )

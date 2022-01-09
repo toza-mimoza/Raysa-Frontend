@@ -7,22 +7,17 @@
   <h1 class="text-center">Bot Statistics</h1>
   <hr>
   <div class="row" id="chartContainer">
-    <!-- {% for bot in bots_list %}
-      <input type="hidden"  id="current_bot" value="{{ bot.id }}">
-      <div class="col-lg-4 col-md-6 col-sm-12">
-        <h3 class="text-center">{{bot.bot_name}}</h3>
-        <canvas id={{bot.id}}></canvas>
-      </div>
-    {% endfor %} -->
     {% block scripts %}
     <!-- Here include only CDN scripts -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.0/dist/chart.min.js"></script>
     {% endblock %}
     <script src="{{ url_for('static', filename='js/allBotsChart.js') }}"></script>
+
     {% for bot in bots_list %}
-      <input type="hidden"  id="current_bot" value="{{ bot.id }}">
+
+    <!-- {{loop.index0}} -->
       <script>
-        initChart({{data|safe}}, {{labels|safe}}, "{{bot.bot_name|safe}}");
+        initChart({{data[loop.index0]|safe}}, {{labels[loop.index0]|safe}}, "{{bot.bot_name|safe}}");
       </script>
     {% endfor %}
   </div>

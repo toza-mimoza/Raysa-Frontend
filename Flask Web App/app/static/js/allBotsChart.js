@@ -1,14 +1,6 @@
 var chartContainer = document.getElementById("chartContainer");
-
-const columnHTML1 = '<div class="col-lg-4 col-md-6 col-sm-12">';
-const columnHTML2 = '</div>';
-var objects = [];
 var idCounter = 0;
 
-
-function initHTMLelements(){
-
-}
 
 function initChart(data, labels, title){
   var divBootstrapColumn = document.createElement("div");
@@ -18,7 +10,7 @@ function initChart(data, labels, title){
   // set h3 title text and class
   titleElement.innerHTML = title;
   titleElement.className = "text-center";
-  
+
   // append title as h3 elements to charts
   divBootstrapColumn.appendChild(titleElement);
 
@@ -38,25 +30,13 @@ function initChart(data, labels, title){
         data: {
             labels: labels,
             datasets: [{
-                label: '# of user messages per day',
+                label: '# of user messages',
                 data: data,
                 backgroundColor: [
-                    'rgba(54, 162, 235, 0.2)',
-                    'rgba(54, 162, 235, 0.2)',
-                    'rgba(54, 162, 235, 0.2)',
-                    'rgba(54, 162, 235, 0.2)',
-                    'rgba(54, 162, 235, 0.2)',
-                    'rgba(54, 162, 235, 0.2)',
-                    'rgba(54, 162, 235, 0.2)',
+                    'rgba(75, 0, 130, 0.2)',
                 ],
                 borderColor: [
-                    'rgba(54, 162, 235, 1)',
-                    'rgba(54, 162, 235, 1)',
-                    'rgba(54, 162, 235, 1)',
-                    'rgba(54, 162, 235, 1)',
-                    'rgba(54, 162, 235, 1)',
-                    'rgba(54, 162, 235, 1)',
-                    'rgba(54, 162, 235, 1)',
+                    'rgba(75, 0, 130, 1)',
                 ],
                 borderWidth: 1
             }]

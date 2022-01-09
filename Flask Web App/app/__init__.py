@@ -9,7 +9,7 @@ from flask_user import UserManager, current_user
 from flask_gravatar import Gravatar
 from flask_wtf.csrf import CSRFProtect
 from .models.db import db
-from .models.bot_models import Bots, Conversations, Messages
+from .models.bot_models import Bots, Conversations, Messages, Statistics
 from .models.user_models import User, Role
 from .models.site_models import Site
 import datetime
@@ -20,6 +20,7 @@ from flask_admin.contrib.sqla import ModelView
 from flask_socketio import SocketIO
 from .distributed_manager.manager import init_handlers
 from .logging_config.logging_config import init_prod_logging, init_dev_logging
+from datetime import date
 
 # Instantiate Flask extensions
 csrf_protect = CSRFProtect()
@@ -33,10 +34,10 @@ def init_data():
     """Initialize site data"""
 
     # first flush all bots data
-    all_bots = Bots.query.all()
-    for bot in all_bots:
-        db.session.delete(bot)
-        db.session.commit()
+    # all_bots = Bots.query.all()
+    # for bot in all_bots:
+    #     db.session.delete(bot)
+    #     db.session.commit()
 
     if not Site.query.filter(Site.site_name == os.getenv("INIT_SITE_NAME")).first():
         Site.create(
@@ -47,8 +48,8 @@ def init_data():
             site_visitors_total_count=0,
         )
 
-    if not Bots.query.filter(Bots.bot_name == os.getenv("INIT_BOT_NAME1")).first():
-        Bots.create(
+    if not Bots.retrieve(bot_name=os.getenv("INIT_BOT_NAME1")):
+        bot = Bots.create(
             bot_name=os.getenv("INIT_BOT_NAME1"),
             bot_description=os.getenv("INIT_BOT_DESCRIPTION"),
             bot_added_at=datetime.datetime.utcnow(),
@@ -60,9 +61,44 @@ def init_data():
             vm_region=os.getenv("INIT_VM_REGION"),
             vm_ram=os.getenv("INIT_VM_RAM1"),
         )
+        Statistics.create(
+            bot_id=bot.id,
+            date_added=date(year=2022, month=1, day=1),
+            num_requests_handled=2,
+        )
+        Statistics.create(
+            bot_id=bot.id,
+            date_added=date(year=2022, month=1, day=2),
+            num_requests_handled=4,
+        )
+        Statistics.create(
+            bot_id=bot.id,
+            date_added=date(year=2022, month=1, day=3),
+            num_requests_handled=5,
+        )
+        Statistics.create(
+            bot_id=bot.id,
+            date_added=date(year=2022, month=1, day=4),
+            num_requests_handled=4,
+        )
+        Statistics.create(
+            bot_id=bot.id,
+            date_added=date(year=2022, month=1, day=5),
+            num_requests_handled=5,
+        )
+        Statistics.create(
+            bot_id=bot.id,
+            date_added=date(year=2022, month=1, day=6),
+            num_requests_handled=4,
+        )
+        Statistics.create(
+            bot_id=bot.id,
+            date_added=date(year=2022, month=1, day=7),
+            num_requests_handled=5,
+        )
 
-    if not Bots.query.filter(Bots.bot_name == os.getenv("INIT_BOT_NAME2")).first():
-        Bots.create(
+    if not Bots.retrieve(bot_name=os.getenv("INIT_BOT_NAME2")):
+        bot = Bots.create(
             bot_name=os.getenv("INIT_BOT_NAME2"),
             bot_description=os.getenv("INIT_BOT_DESCRIPTION"),
             bot_added_at=datetime.datetime.utcnow(),
@@ -74,9 +110,43 @@ def init_data():
             vm_region=os.getenv("INIT_VM_REGION"),
             vm_ram=os.getenv("INIT_VM_RAM2"),
         )
-
-    if not Bots.query.filter(Bots.bot_name == os.getenv("INIT_BOT_NAME3")).first():
-        Bots.create(
+        Statistics.create(
+            bot_id=bot.id,
+            date_added=date(year=2022, month=1, day=1),
+            num_requests_handled=20,
+        )
+        Statistics.create(
+            bot_id=bot.id,
+            date_added=date(year=2022, month=1, day=2),
+            num_requests_handled=21,
+        )
+        Statistics.create(
+            bot_id=bot.id,
+            date_added=date(year=2022, month=1, day=3),
+            num_requests_handled=12,
+        )
+        Statistics.create(
+            bot_id=bot.id,
+            date_added=date(year=2022, month=1, day=4),
+            num_requests_handled=41,
+        )
+        Statistics.create(
+            bot_id=bot.id,
+            date_added=date(year=2022, month=1, day=5),
+            num_requests_handled=54,
+        )
+        Statistics.create(
+            bot_id=bot.id,
+            date_added=date(year=2022, month=1, day=6),
+            num_requests_handled=41,
+        )
+        Statistics.create(
+            bot_id=bot.id,
+            date_added=date(year=2022, month=1, day=7),
+            num_requests_handled=52,
+        )
+    if not Bots.retrieve(bot_name=os.getenv("INIT_BOT_NAME3")):
+        bot = Bots.create(
             bot_name=os.getenv("INIT_BOT_NAME3"),
             bot_description=os.getenv("INIT_BOT_DESCRIPTION"),
             bot_added_at=datetime.datetime.utcnow(),
@@ -87,6 +157,41 @@ def init_data():
             vm_vcpu=os.getenv("INIT_VM_VCPU3"),
             vm_region=os.getenv("INIT_VM_REGION"),
             vm_ram=os.getenv("INIT_VM_RAM3"),
+        )
+        Statistics.create(
+            bot_id=bot.id,
+            date_added=date(year=2022, month=1, day=1),
+            num_requests_handled=20,
+        )
+        Statistics.create(
+            bot_id=bot.id,
+            date_added=date(year=2022, month=1, day=2),
+            num_requests_handled=21,
+        )
+        Statistics.create(
+            bot_id=bot.id,
+            date_added=date(year=2022, month=1, day=3),
+            num_requests_handled=12,
+        )
+        Statistics.create(
+            bot_id=bot.id,
+            date_added=date(year=2022, month=1, day=4),
+            num_requests_handled=41,
+        )
+        Statistics.create(
+            bot_id=bot.id,
+            date_added=date(year=2022, month=1, day=5),
+            num_requests_handled=54,
+        )
+        Statistics.create(
+            bot_id=bot.id,
+            date_added=date(year=2022, month=1, day=6),
+            num_requests_handled=41,
+        )
+        Statistics.create(
+            bot_id=bot.id,
+            date_added=date(year=2022, month=1, day=7),
+            num_requests_handled=52,
         )
 
 
