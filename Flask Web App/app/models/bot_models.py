@@ -56,7 +56,7 @@ class Bots(BaseModel, db.Model):
     vm_ram = db.Column(db.Float)
 
 
-class Tags(db.Model):
+class Tags(BaseModel, db.Model):
     """Model for tagging system for bots."""
 
     __tablename__ = "tags"
