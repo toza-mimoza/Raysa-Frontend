@@ -4,6 +4,7 @@ html{
 body {
     margin: 0 auto;
     padding-top: 70px;
+    font-family: 'Inconsolata', monospace;
 }
 
 /* Modify the background color of the navigation bar */
@@ -19,7 +20,6 @@ body {
 }
 
 #brandLogo{
-  width: 30px;
   height: 30px;
   vertical-align: middle;
 }
