@@ -87,7 +87,7 @@ function getResponse() {
     socket.on('response_question_event', function(msg){
        // console.log('User received:', msg);
        userText=msg
-       console.log(userText)
+       // console.log("User said: ", userText)
     });
 
     // send user text to server
@@ -98,7 +98,7 @@ function getResponse() {
 
     // wait for response
     socket.on('response_event', function(msg){
-       console.log('User received:', msg);
+       // console.log('User received:', msg);
        responseText=msg
     });
 
@@ -121,7 +121,7 @@ function getResponse() {
       $("#chatbox").append(botHtml);
       document.getElementById("chat-bar-bottom").scrollIntoView(true);
 
-    }, 500)
+    }, 100)
 
     return responseText;
 }
