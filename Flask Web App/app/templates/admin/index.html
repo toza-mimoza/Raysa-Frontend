@@ -1,7 +1,10 @@
 {% extends 'admin/master.html' %}
 {% block title %}Admin{% endblock %}
-
+{% block head %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/links.css') }}">
+{% endblock %}
 {% block body %}
   <h1>Raysa Dashboard</h1>
   <p>Welcome to the the Raysa Dashboard. Here you can alter and see your DB entries for your models.</p>
+  <a  class="draw-outline" href={{ url_for('main.index') }}>{%trans%}Back to Index{%endtrans%}</a>
 {% endblock %}
