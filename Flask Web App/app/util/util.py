@@ -4,6 +4,7 @@ from time import mktime
 from app.models.bot_models import Bots
 
 import pandas as pd
+import uuid
 
 
 def load_dict_from_csv(filename):
@@ -11,6 +12,17 @@ def load_dict_from_csv(filename):
 
 
 dict_questions = load_dict_from_csv("app/util/sample_questions.csv")
+
+
+def get_or_set_session_uid(session):
+    if "uid" in session:
+        return session["uid"]
+    else:
+        # generate uuid4
+        session_uid = uuid.uuid4().hex
+        session["uid"] = session_uid
+        return session_uid
+        pass
 
 
 def check_if_bot_exists(query_name) -> bool:

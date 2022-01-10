@@ -71,6 +71,7 @@ class Conversations(BaseModel, db.Model):
     uuid = db.Column(
         UUID(as_uuid=True), primary_key=True, default=lambda: uuid.uuid4().hex
     )
+    session_uuid = db.Column(UUID(as_uuid=True))
     messages = db.relationship("Messages", backref="conversations", lazy=True)
 
 

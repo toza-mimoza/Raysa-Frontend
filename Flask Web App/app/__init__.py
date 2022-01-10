@@ -3,6 +3,7 @@
 
 import os
 from flask import Flask
+from flask_session import Session
 from flask_mail import Mail
 from flask_migrate import Migrate
 from flask_user import UserManager, current_user
@@ -18,7 +19,7 @@ from app.common.extensions import cache
 from flask_admin import Admin
 from flask_admin.contrib.sqla import ModelView
 from flask_socketio import SocketIO
-from .distributed_manager.manager import init_handlers
+from .distributed_manager.manager import init_dist_manager
 from .logging_config.logging_config import init_prod_logging, init_dev_logging
 from datetime import date
 
@@ -218,9 +219,15 @@ def create_app(extra_config_settings={}):
 
     app.config["FLASK_ADMIN_SWATCH"] = "cerulean"
 
+    # init flask session extension
+    Session(app)
+
     # Initalize app as socketio instance
-    socketio = SocketIO(app, cors_allowed_origins="http://127.0.0.1:5000")
-    init_handlers(socketio)
+    socketio = SocketIO(
+        app, cors_allowed_origins="http://127.0.0.1:5000", manage_session=False
+    )
+
+    init_dist_manager(socketio, app, db)
 
     if app.config["DEBUG"] is False:
         init_prod_logging()

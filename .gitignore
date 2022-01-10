@@ -19,3 +19,6 @@ commands_list.txt
 
 # ignore logging config for now, Flask has its own Python logging configuration
 # logging_config
+
+# don't store flask session
+flask_session

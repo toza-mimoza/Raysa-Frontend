@@ -7,23 +7,42 @@
 import random
 import requests
 import logging
+import uuid
+from app.util.util import get_or_set_session_uid
+from flask import session
 from flask_socketio import emit
 from .trackers import MessageTracker
 from app.util.util import dict_questions, remove_quotes_from_str
+from app.models.bot_models import Tags, Conversations
 
 log = logging.getLogger(__name__)
 
 
-def init_handlers(socketio):
+def init_dist_manager(socketio, app, db):
+    db.init_app(app)
+    # with app.app_context():
+    #     print(app.name)
+    #     Tags.create(tag_name="BotBOTBOT")
     dist_manager = DistributedManager(bot_url_dict={})
     STUB_RESPONSE = "STUB_RESPONSE"
 
     @socketio.on("connect")
     def handle_connection():
         log.info("Connected a client.")
-        pass
+        # check if session changed
+        # start a new conversation
 
-    # general message channel
+        session_uid = get_or_set_session_uid(session)
+
+        with app.app_context():
+            #
+            # conversation = Conversations.retrieve(session_uid=session_uid)
+
+            # if not conversation:
+            #     Conversations.create(session_uid=session_uid)
+            pass
+
+    # general message channel for misc stuff, not to be used for user messages
     @socketio.on("message")
     def handle_message(msg):
         log.info(f"Client message: {msg}")
