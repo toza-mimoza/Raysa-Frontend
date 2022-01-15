@@ -1,6 +1,7 @@
 # __init__.py is a special Python file that allows a directory to become
 # a Python package so it can be accessed using the 'import' statement.
 
+import asyncio
 import os
 from flask import Flask
 from flask_session import Session
@@ -22,6 +23,7 @@ from flask_socketio import SocketIO
 from .distributed_manager.manager import init_dist_manager
 from .logging_config.logging_config import init_prod_logging, init_dev_logging
 from datetime import date
+from app.socketio_events.register_events import register_events
 
 # Instantiate Flask extensions
 csrf_protect = CSRFProtect()
@@ -227,7 +229,9 @@ def create_app(extra_config_settings={}):
         app, cors_allowed_origins="http://127.0.0.1:5000", manage_session=False
     )
 
-    init_dist_manager(socketio, app, db)
+    register_events(socketio)
+
+    init_dist_manager({})
 
     if app.config["DEBUG"] is False:
         init_prod_logging()

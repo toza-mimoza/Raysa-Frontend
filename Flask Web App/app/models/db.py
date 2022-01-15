@@ -16,6 +16,9 @@ class BaseMixin(object):
         try:
             db.session.add(instance)
             db.session.commit()
+            log.info(
+                f"{instance.__class__.__name__}: The {instance.__class__.__name__} CREATED in DB."
+            )
         except DBexception as e:
             log.critical(
                 f"{e.__class__.__name__}: The {instance.__class__.__name__} cannot be CREATED in DB."
@@ -27,6 +30,10 @@ class BaseMixin(object):
     def retrieve(cls, **kw):
         """Retrieve cRud operation."""
         instance = db.session.query(cls).filter_by(**kw).first()
+        if instance:
+            log.info(
+                f"{instance.__class__.__name__}: The {instance.__class__.__name__} RETRIEVED from the DB."
+            )
         log.info(
             f"An instance of {instance.__class__.__name__} is being RETRIEVED from the DB."
         )
@@ -37,11 +44,12 @@ class BaseMixin(object):
         """
         Retrieve cRud operation returning a list of objects with common attribute specified by kw argument.
         """
-        instance = db.session.query(cls).filter_by(**kw).all()
-        log.info(
-            f"An instance of {instance.__class__.__name__} is being RETRIEVED from the DB."
-        )
-        return instance
+        instances = db.session.query(cls).filter_by(**kw).all()
+        if instances:
+            log.info(
+                f"Instances of {instances.__class__.__name__} are being RETRIEVED from the DB."
+            )
+        return instances
 
     @classmethod
     def update(cls, **kw):
