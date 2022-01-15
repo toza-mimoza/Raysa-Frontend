@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block title %}Manager{% endblock %}
+
+{% block head %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/links.css') }}">
+{% endblock %}
+{% block content %}
+<h1 class="text-center">Bots Manager</h1>
+  {% if not bots_list %}
+  <h3>No bots currently exist.</h3>
+  {% endif %}
+  <div class="row mt-5 justify-content-center">
+    {% for bot in bots_list %}
+    <div class="card mb-4 m-3" style="width: 18rem;padding: 10px;">
+        <div class="card-body">
+            <div class="text-center">
+              <h5 class="card-title text-center">{{bot.bot_name}}</h5>
+            </div>
+            <h6 class="card-subtitle mb-2 text-muted">Added at: {{bot.bot_added_at}}</h6>
+            <p class="card-text">{{bot.bot_description}}</p>
+            <hr>
+            <div class="button-container text-center">
+              <a  class="draw-outline" href={{ url_for('manager.train_bot', bot_name=bot.bot_name) }}>{%trans%}Train{%endtrans%}</a>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+
+  </div>
+{% endblock %}
