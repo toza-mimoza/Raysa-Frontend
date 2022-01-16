@@ -120,9 +120,13 @@ def show_statistics_for_all():
                 temp_list_labels.append(label_temp)
             bot_data.append(temp_list_data)
             bot_labels.append(temp_list_labels)
-            log.info(f"Statistics object for bot: {bot.bot_name} found!")
+            log.info(
+                f"Statistics object for bot: {bot.bot_name}, with id: {bot.id} found!"
+            )
         else:
-            log.warn(f"Statistics object for bot: {bot.bot_name} not found!")
+            log.warn(
+                f"Statistics object for bot: {bot.bot_name}, with id: {bot.id} not found!"
+            )
             pass
     return render_template(
         "bots/stats_all.html", data=bot_data, labels=bot_labels, bots_list=bots_list

@@ -20,7 +20,8 @@
             <p class="card-text">{{bot.bot_description}}</p>
             <hr>
             <div class="button-container text-center">
-              <a  class="draw-outline" href={{ url_for('manager.train_bot', bot_name=bot.bot_name) }}>{%trans%}Train{%endtrans%}</a>
+              <a  class="draw-outline btn-manager" href={{ url_for('manager.train_ind_bot', bot_name=bot.bot_name) }}>{%trans%}Train Individually{%endtrans%}</a>
+              <a  class="draw-outline btn-manager" href={{ url_for('manager.train_dist_bot', bot_name=bot.bot_name) }}>{%trans%}Train Distributed{%endtrans%}</a>
             </div>
         </div>
     </div>
