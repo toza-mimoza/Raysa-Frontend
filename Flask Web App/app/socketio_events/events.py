@@ -1,11 +1,10 @@
 import logging
 import random
 import datetime
-import json
-from flask import session
-from flask_socketio import emit, send
+from flask_socketio import emit
 from app.util.util import dict_questions, remove_quotes_from_str
 from app.util.constants import STUB_RESPONSE, TIME_FORMAT_TRAINING
+from app.distributed_manager.manager import DistributedManager
 
 log = logging.getLogger(__name__)
 
@@ -26,6 +25,9 @@ def handle_user_message(msg):
     # response = dist_manager.send_request_to(url, body)
     emit("response_event", STUB_RESPONSE)  # response.text
     log.info(f"Response emitted: {STUB_RESPONSE}")  # response.text
+    DistributedManager.send_request_all(DistributedManager.bot_base_urls)
+    DistributedManager.clear()
+    DistributedManager.send_request_all(DistributedManager.bot_base_urls)
     pass
 
 
