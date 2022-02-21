@@ -7,6 +7,7 @@ import os
 # DO NOT use "DEBUG = True" in production environments
 DEBUG = True
 
+SESSION_TYPE = "filesystem"
 # DO NOT use Unsecure Secrets in production environments
 # Generate a safe one with:
 #     python -c "import os; print repr(os.urandom(24));"

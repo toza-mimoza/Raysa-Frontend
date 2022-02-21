@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template
-from flask import request, json
+from flask import request
 from flask_user import login_required, roles_required
 from flask import Response
 
@@ -26,18 +26,6 @@ def show_all_bots():
         bots_list.append(qbot)
 
     return render_template("bots/bots.html", bots_list=bots_list)
-
-
-@bot_blueprint.route("/train/<bot_name>")
-@roles_required("Admin")  # Limits access to users with the 'admin' role
-def train_bot(bot_name):
-    """Returns a template for training overview for a specific bot."""
-    if not check_if_bot_exists(bot_name):
-        return page_not_found(bot_name)
-
-    bot = Bots.query.filter_by(bot_name=bot_name).first()
-
-    return render_template("bots/train.html", bot=bot)
 
 
 @bot_blueprint.route("/logs/<bot_name>")
@@ -132,9 +120,13 @@ def show_statistics_for_all():
                 temp_list_labels.append(label_temp)
             bot_data.append(temp_list_data)
             bot_labels.append(temp_list_labels)
-            log.info(f"Statistics object for bot: {bot.bot_name} found!")
+            log.info(
+                f"Statistics object for bot: {bot.bot_name}, with id: {bot.id} found!"
+            )
         else:
-            log.warn(f"Statistics object for bot: {bot.bot_name} not found!")
+            log.warn(
+                f"Statistics object for bot: {bot.bot_name}, with id: {bot.id} not found!"
+            )
             pass
     return render_template(
         "bots/stats_all.html", data=bot_data, labels=bot_labels, bots_list=bots_list
@@ -148,6 +140,7 @@ def show_statistics_for_bot(bot_name):
         return page_not_found(bot_name)
 
     # retrieve bot information from db
+    bot = Bots.query.filter_by(bot_name=bot_name).first()
+    stats = Statistics.query.filter_by(bot_id=bot.id).all()
 
-    context = {"bot_name": "REPLACE", "cluster_name": "REPLACE"}
-    return render_template("bots/stats_bot.html", **context)
+    return render_template("bots/stats_bot.html", stats=stats)

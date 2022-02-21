@@ -94,6 +94,9 @@
                     Statistics
                   </a>
                 </li>
+                <li class="nav-item">
+                  <a class="nav-link active" aria-current="page" href="{{ url_for('manager.control_panel') }}">Manager</a>
+                </li>
 
               </ul>
 
@@ -136,7 +139,7 @@
       {% endblock %}
     </div>
     <!-- Chat widget -->
-    <div class="chat-bar-collapsible">
+    <div class="chat-bar-collapsible widget-z-index">
         <button id="chat-button" type="button" class="collapsible">Try me out!
             <i id="chat-icon" style="color: #fff;" class="fa fa-fw fa-comments-o"></i>
         </button>
@@ -179,6 +182,8 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js" integrity="sha512-q/dWJ3kcmjBLU4Qc47E4A9kTB4m3wuTY7vkFJDTZKjTs8jhyGQnaUrxa0Ytd0ssMZhbNua9hE+E7Qv1j+DyZwA==" crossorigin="anonymous"></script>
     <script src="{{ url_for('static', filename='js/responses.js') }}"></script>
     <script src="{{ url_for('static', filename='js/chat.js') }}"></script>
+    {% block train %}
+    {% endblock %}
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 

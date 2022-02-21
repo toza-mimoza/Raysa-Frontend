@@ -33,3 +33,15 @@ canvas{
     display: block;
     margin: 0 auto;
 }
+
+/* make chat widget on top of everything if shown */
+
+.widget-z-index{
+  z-index: 100;
+}
+
+/* margins on buttons in manager */
+.btn-manager{
+  margin-bottom: 10px;
+  width: 90%;
+}

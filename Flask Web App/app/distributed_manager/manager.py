@@ -4,97 +4,84 @@
 #   file extraction (logs)
 #   on the other end there is an HTTP RESTful API for offering files to download
 #   SECURITY: implement token based authentication for RESTful service (API keys)
-import random
-import requests
+# #
+
+import asyncio
+import aiohttp
+import concurrent
 import logging
-from flask_socketio import emit
-from .trackers import MessageTracker
-from app.util.util import dict_questions, remove_quotes_from_str
+import sys
+from typing import List
+from app.util.constants import TIMEOUT
 
 log = logging.getLogger(__name__)
 
 
-def init_handlers(socketio):
-    dist_manager = DistributedManager(bot_url_dict={})
-    STUB_RESPONSE = "STUB_RESPONSE"
-
-    @socketio.on("connect")
-    def handle_connection():
-        log.info("Connected a client.")
-        pass
-
-    # general message channel
-    @socketio.on("message")
-    def handle_message(msg):
-        log.info(f"Client message: {msg}")
-        pass
-
-    @socketio.on("UserSendsMessage")
-    def handle_user_message(msg):
-        log.info(f"User sent: {msg}")
-        # response = dist_manager.send_request_to(url, body)
-        emit("response_event", STUB_RESPONSE)  # response.text
-        log.info(f"Response emitted: {STUB_RESPONSE}")  # response.text
-        pass
-
-    @socketio.on("request_question_event")
-    def handle_question_request():
-        rand_number = random.randint(1, len(dict_questions))
-        response = dict_questions[rand_number]
-        emit(
-            "response_question_event", remove_quotes_from_str(response)
-        )  # response.text
-        log.info(f"User requested a random question, got: {response}.")
-        pass
-
-
-def ack_client():
-    log.info("Message was received by the client.")
+# def create_conversation(app, db):
+#     db.init_app(app)
+#     session_uid = get_or_set_session_uid(session)
+#
+#     with app.app_context():
+#         Conversations.create(session_uid=session_uid)
 
 
 class DistributedManager:
-    """
-    DistributedManager handles request sending and receiving to and from
-    chatbots, which all communicate with the Raysa Flask platform.
 
-    Attributes
-    ----------
-    bot_url_dict : dict{ Bot : str }
-        dictionary of bots as keys and their URL addresses as strings.
+    bot_base_urls = []
+    results = []
+    loop = asyncio.new_event_loop()
 
-    Methods
-    -------
-    send_request_to(self, url, body, headers=None)
-        sends a RASA HTTP request to the specified URL.
+    def __init__(self, bot_base_urls: List[str]):
+        self.bot_base_urls = bot_base_urls
+        pass
 
-    send_request_to_all(self, body, headers=None)
-        sends a RASA HTTP request to each of the Bots in the Raysa cluster.
+    async def async_send_request_all(urls):
 
-    get_best_matched_response(self)
-        returns a best matched response string to the caller
-    """
+        # overwrite for testing purposes
+        # urls = [
+        #     "https://jsonplaceholder.typicode.com/todos/1",
+        # ]
+        try:
+            async with aiohttp.ClientSession() as session:
+                print("Making tasks...")
+                tasks = []
+                for url in urls:
+                    tasks.append(session.get(url, timeout=TIMEOUT, ssl=False))
+                print("Awaiting tasks...")
+                responses = await asyncio.gather(*tasks)
+                print("Response(s) awaited...")
+                for response in responses:
+                    DistributedManager.results.append(
+                        await response.json(content_type=None)
+                    )
+                    print("Appending result to DS manager...")
+                    print(f"Response: {DistributedManager.results}")
+                pass
+        except concurrent.futures._base.TimeoutError as timeout_error:
+            type_, value_, traceback_ = sys.exc_info()
+            # log.exception(f"{type_}: {value_}")
+            log.exception(
+                f"<concurrent.futures._base.TimeoutError > Timeout error: {timeout_error}"
+            )
+            pass
+        except Exception as e:
+            type_, value_, traceback_ = sys.exc_info()
+            log.exception(f"{type_}: {value_}")
+            log.exception(f"<aiohttp.ClientConnectorError> Connection error: {e}")
+            raise
+        pass
 
-    responses_list = []
-
-    def __init__(self, bot_url_dict):
-        self.bot_url_dict = bot_url_dict
-
-    def send_request_to(self, url, body, headers=None):
-        if headers is None:
-            return requests.post(url, json=body)
-        else:
-            return requests.post(url, headers=headers, json=body)
-
-    def send_request_to_all(self, body, headers=None):
-        """
-        This class uses the attribute bot_url_dict to send requests to all
-        chatbots.
-        """
-
-        for bot in self.bot_url_dict:
-            self.responses_list.append(
-                self.send_request_to(self.bot_url_dict[bot], body)
+    def send_request_all(urls, endpoints=None, msg=None):
+        if DistributedManager.bot_base_urls:
+            DistributedManager.loop.run_until_complete(
+                DistributedManager.async_send_request_all(urls)
             )
 
     def get_best_matched_response(self):
-        return None
+        if DistributedManager.results:
+            pass
+
+    def clear():
+        DistributedManager.bot_base_urls = []
+        DistributedManager.results = []
+        pass
